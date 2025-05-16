@@ -5,10 +5,11 @@ import io.ktor.client.engine.okhttp.OkHttpConfig
 import io.ktor.client.engine.okhttp.OkHttpEngine
 
 /**
- * Android implementation of [Platform].
+ * JVM implementation of [Platform].
  */
-internal object AndroidPlatform : Platform {
-    override val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
+internal object JvmPlatform : Platform {
+
+    override val name: String = "JVM"
 
     override val httpClientEngineConfig: HttpClientEngine
         get() = OkHttpEngine(
@@ -18,6 +19,7 @@ internal object AndroidPlatform : Platform {
                 }
             }
         )
+
 }
 
-internal actual val platform: Platform get() = AndroidPlatform
+internal actual val platform: Platform get() = JvmPlatform
