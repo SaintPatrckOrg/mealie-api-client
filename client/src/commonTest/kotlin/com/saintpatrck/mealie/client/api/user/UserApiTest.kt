@@ -1,47 +1,31 @@
-package com.saintpatrck.mealie.client.api.registration
+package com.saintpatrck.mealie.client.api.user
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MealieToken
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
-import com.saintpatrck.mealie.client.api.registration.model.RegisterUserRequestJson
-import com.saintpatrck.mealie.client.api.registration.model.RegisterUserResponseJson
+import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class RegistrationApiTest : BaseApiTest() {
+class UserApiTest : BaseApiTest() {
 
     @Test
-    fun `registerUser should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = REGISTER_USER_RESPONSE_JSON)
-            .registrationApi
-            .registerUser(
-                user = RegisterUserRequestJson(
-                    email = "test@email.com",
-                    fullName = "Test",
-                    password = "password",
-                    passwordConfirm = "password",
-                    username = "username",
-                    group = null,
-                    household = null,
-                    groupToken = null,
-                    advanced = false,
-                    private = true,
-                    seedData = false,
-                    locale = "en-US",
-                )
-            )
+    fun `self should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = SELF_RESPONSE_JSON)
+            .userApi
+            .self()
             .also { response ->
                 assertEquals(
-                    createMockRegisterUserResponseJson(),
+                    createMockSelfResponseJson(),
                     response.getOrNull(),
                 )
             }
     }
 }
 
-private const val REGISTER_USER_RESPONSE_JSON = """
+private const val SELF_RESPONSE_JSON = """
 {
   "username": "username",
   "email": "test@email.com",
@@ -71,21 +55,21 @@ private const val REGISTER_USER_RESPONSE_JSON = """
 }
 """
 
-fun createMockRegisterUserResponseJson() = RegisterUserResponseJson(
-    username = "username",
-    email = "test@email.com",
-    fullName = "fullName",
-    group = "group",
-    household = "householdId",
-    groupId = "groupId",
-    advanced = false,
-    canManageHousehold = false,
+private fun createMockSelfResponseJson() = SelfResponseJson(
     id = "id",
+    username = "username",
+    fullName = "fullName",
+    email = "test@email.com",
     authMethod = MealieAuthMethod.MEALIE,
     admin = false,
+    group = "group",
+    household = "household",
+    advanced = false,
     canInvite = false,
     canManage = false,
+    canManageHousehold = false,
     canOrganize = false,
+    groupId = "groupId",
     groupSlug = "groupSlug",
     householdId = "householdId",
     householdSlug = "householdSlug",
