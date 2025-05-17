@@ -2,6 +2,8 @@ package com.saintpatrck.mealie.client
 
 import com.saintpatrck.mealie.client.api.about.AboutApi
 import com.saintpatrck.mealie.client.api.about.createAboutApi
+import com.saintpatrck.mealie.client.api.auth.AuthApi
+import com.saintpatrck.mealie.client.api.auth.createAuthApi
 import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
 import com.saintpatrck.mealie.client.infrastructure.ktorfit.mealieKtorfit
 import com.saintpatrck.mealie.client.model.MealieClientConfig
@@ -16,7 +18,6 @@ fun mealieClient(
 ): MealieClient = MealieClient(
     MealieClientConfig().apply(config)
 )
-
 
 /**
  * Represents a client for the Mealie API.
@@ -50,5 +51,12 @@ class MealieClient internal constructor(
      */
     val aboutApi: AboutApi by lazy {
         ktorfit.createAboutApi()
+    }
+
+    /**
+     * The API for authenticating with the Mealie instance.
+     */
+    val authApi: AuthApi by lazy {
+        ktorfit.createAuthApi()
     }
 }
