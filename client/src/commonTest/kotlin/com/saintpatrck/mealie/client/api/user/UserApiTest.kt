@@ -9,6 +9,7 @@ import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
+import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -75,6 +76,36 @@ class UserApiTest : BaseApiTest() {
                 updatePasswordRequestJson = UpdatePasswordRequestJson(
                     currentPassword = "currentPassword",
                     newPassword = "newPassword",
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    Unit,
+                    response.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `updateUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .updateUser(
+                userId = "userId",
+                updateUserRequestJson = UpdateUserRequestJson(
+                    id = "id",
+                    username = "username",
+                    fullName = "fullName",
+                    email = "email",
+                    authMethod = MealieAuthMethod.MEALIE,
+                    admin = false,
+                    group = "group",
+                    household = "household",
+                    advanced = false,
+                    canInvite = false,
+                    canManage = false,
+                    canManageHousehold = false,
+                    canOrganize = false,
                 )
             )
             .also { response ->
