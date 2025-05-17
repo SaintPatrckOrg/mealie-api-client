@@ -72,7 +72,7 @@ class MealieClient internal constructor(
     }
 
     /**
-     * The API for retrieving information about the Mealie instance.
+     * The API for user CRUD operations.
      */
     val userApi: UserApi by lazy {
         ktorfit.createUserApi()
