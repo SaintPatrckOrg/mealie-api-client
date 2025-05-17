@@ -43,7 +43,7 @@ jobs:
         run: ./gradlew build
 
       - name: Run tests
-        run: ./gradlew check
+        run: ./gradlew check testDebugUnitTest
 
       - name: Upload Reports
         if: always() # Run this step even if previous steps fail
