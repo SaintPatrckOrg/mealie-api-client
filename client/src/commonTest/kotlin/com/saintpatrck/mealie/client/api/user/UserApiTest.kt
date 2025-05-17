@@ -4,6 +4,7 @@ import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MealieToken
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
+import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
@@ -19,6 +20,19 @@ class UserApiTest : BaseApiTest() {
             .also { response ->
                 assertEquals(
                     createMockSelfResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `ratings should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = SELF_RATINGS_RESPONSE_JSON)
+            .userApi
+            .ratings()
+            .also { response ->
+                assertEquals(
+                    createMockSelfRatingsResponseJson(),
                     response.getOrNull(),
                 )
             }
@@ -54,6 +68,17 @@ private const val SELF_RESPONSE_JSON = """
   "cacheKey": "cacheKey"
 }
 """
+private const val SELF_RATINGS_RESPONSE_JSON = """
+{
+  "ratings": [
+    {
+      "recipeId": "recipeId",
+      "rating": 1.0,
+      "isFavorite": false
+    }
+  ]
+}
+"""
 
 private fun createMockSelfResponseJson() = SelfResponseJson(
     id = "id",
@@ -81,4 +106,14 @@ private fun createMockSelfResponseJson() = SelfResponseJson(
         )
     ),
     cacheKey = "cacheKey",
+)
+
+private fun createMockSelfRatingsResponseJson() = SelfRatingsResponseJson(
+    ratings = listOf(
+        SelfRatingsResponseJson.Rating(
+            recipeId = "recipeId",
+            rating = 1.0,
+            isFavorite = false,
+        )
+    ),
 )
