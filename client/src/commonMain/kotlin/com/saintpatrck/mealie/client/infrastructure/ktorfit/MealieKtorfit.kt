@@ -16,6 +16,7 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.LoggingConfig
 import io.ktor.client.plugins.plugin
+import io.ktor.http.Url
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
@@ -71,8 +72,12 @@ internal fun mealieKtorfit(
                 client
                     .plugin(HttpSend)
                     .intercept { request ->
+                        val baseUrl = Url(baseUrlProvider())
                         execute(
-                            request.apply { url.host = baseUrlProvider() }
+                            request.apply {
+                                url.host = baseUrl.host
+                                url.port = baseUrl.port
+                            }
                         )
                     }
             }
