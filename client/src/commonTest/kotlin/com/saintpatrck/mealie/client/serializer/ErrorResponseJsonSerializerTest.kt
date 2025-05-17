@@ -63,13 +63,6 @@ class ErrorResponseJsonSerializerTest : BaseApiTest() {
     }
 }
 
-private val UNAUTHORIZED_ERROR_RESPONSE = """
-{
-    "detail": "string"
-}
-"""
-    .trimIndent()
-
 private val VALIDATION_ERROR_RESPONSE = """
 {
   "detail": [
@@ -78,19 +71,35 @@ private val VALIDATION_ERROR_RESPONSE = """
         "string"
       ],
       "msg": "string",
-      "type": "string"
+      "type": "string",
+      "input": null,
+      "ctx": null
     },
     {
       "loc": [
         "string"
       ],
       "msg": "string",
-      "type": "string"
+      "type": "string",
+      "input": null,
+      "ctx": {
+        "key1": "string",
+        "key2": 1,
+        "key3": null
+      }
     }
   ]
 }
 """
     .trimIndent()
+
+private val UNAUTHORIZED_ERROR_RESPONSE = """
+{
+    "detail": "string"
+}
+"""
+    .trimIndent()
+
 
 private val FORBIDDEN_ERROR_RESPONSE = """
 {
@@ -109,11 +118,19 @@ private fun createMockValidationErrorResponseJson() = ErrorResponseJson.Validati
             location = listOf("string"),
             message = "string",
             type = "string",
+            input = null,
+            context = null,
         ),
         ErrorResponseJson.ValidationErrors.ValidationError(
             location = listOf("string"),
             message = "string",
             type = "string",
+            input = null,
+            context = mapOf(
+                "key1" to "string",
+                "key2" to "1",
+                "key3" to null,
+            ),
         ),
     )
 )

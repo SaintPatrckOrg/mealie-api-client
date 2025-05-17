@@ -38,6 +38,8 @@ sealed class ErrorResponseJson {
          * @property location The location of the error.
          * @property message The error message.
          * @property type The type of the error.
+         * @property input The input that caused the error.
+         * @property context The context of the error.
          */
         @Serializable
         data class ValidationError(
@@ -47,6 +49,10 @@ sealed class ErrorResponseJson {
             val message: String,
             @SerialName("type")
             val type: String?,
+            @SerialName("input")
+            val input: String?,
+            @SerialName("ctx")
+            val context: Map<String, String?>?,
         )
     }
 
