@@ -5,6 +5,7 @@ import com.saintpatrck.mealie.client.api.model.MealieToken
 import com.saintpatrck.mealie.client.api.model.Rating
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
+import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import kotlinx.coroutines.test.runTest
@@ -51,6 +52,19 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `favorites should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = SELF_FAVORITES_RESPONSE_JSON)
+            .userApi
+            .favorites()
+            .also { response ->
+                assertEquals(
+                    createMockSelfFavoritesResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
 private val SELF_RESPONSE_JSON = """
@@ -82,6 +96,7 @@ private val SELF_RESPONSE_JSON = """
   "cacheKey": "cacheKey"
 }
 """
+    .trimIndent()
 private val SELF_RATINGS_RESPONSE_JSON = """
 {
   "ratings": [
@@ -99,6 +114,18 @@ private val SELF_RATING_FOR_RECIPE_RESPONSE_JSON = """
   "recipeId": "recipeId",
   "rating": 1.0,
   "isFavorite": false
+}
+"""
+    .trimIndent()
+private val SELF_FAVORITES_RESPONSE_JSON = """
+{
+  "ratings": [
+    {
+      "recipeId": "recipeId",
+      "rating": 1.0,
+      "isFavorite": false
+    }
+  ]
 }
 """
     .trimIndent()
@@ -146,3 +173,14 @@ private fun createMockRatingForRecipeResponseJson() = Rating(
     rating = 1.0,
     isFavorite = false,
 )
+
+private fun createMockSelfFavoritesResponseJson() = SelfFavoritesResponseJson(
+    ratings = listOf(
+        Rating(
+            recipeId = "recipeId",
+            rating = 1.0,
+            isFavorite = false,
+        )
+    ),
+)
+

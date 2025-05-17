@@ -3,6 +3,7 @@ package com.saintpatrck.mealie.client.api.user
 import com.saintpatrck.mealie.client.api.model.ErrorResponseJson
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.model.Rating
+import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import de.jensklingenberg.ktorfit.http.GET
@@ -37,4 +38,10 @@ interface UserApi {
         @Path("recipeId")
         recipeId: String,
     ): MealieResponse<Rating>
+
+    /**
+     * Retrieves the current user's favorite recipes.
+     */
+    @GET("users/self/favorites")
+    suspend fun favorites(): MealieResponse<SelfFavoritesResponseJson>
 }
