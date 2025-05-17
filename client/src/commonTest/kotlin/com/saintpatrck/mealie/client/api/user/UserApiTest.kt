@@ -2,6 +2,7 @@ package com.saintpatrck.mealie.client.api.user
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MealieToken
+import com.saintpatrck.mealie.client.api.model.Rating
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
@@ -37,9 +38,22 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `ratingForRecipe should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = SELF_RATING_FOR_RECIPE_RESPONSE_JSON)
+            .userApi
+            .ratingForRecipe("recipeId")
+            .also { response ->
+                assertEquals(
+                    createMockRatingForRecipeResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
-private const val SELF_RESPONSE_JSON = """
+private val SELF_RESPONSE_JSON = """
 {
   "username": "username",
   "email": "test@email.com",
@@ -68,7 +82,7 @@ private const val SELF_RESPONSE_JSON = """
   "cacheKey": "cacheKey"
 }
 """
-private const val SELF_RATINGS_RESPONSE_JSON = """
+private val SELF_RATINGS_RESPONSE_JSON = """
 {
   "ratings": [
     {
@@ -79,6 +93,15 @@ private const val SELF_RATINGS_RESPONSE_JSON = """
   ]
 }
 """
+    .trimIndent()
+private val SELF_RATING_FOR_RECIPE_RESPONSE_JSON = """
+{
+  "recipeId": "recipeId",
+  "rating": 1.0,
+  "isFavorite": false
+}
+"""
+    .trimIndent()
 
 private fun createMockSelfResponseJson() = SelfResponseJson(
     id = "id",
@@ -110,10 +133,16 @@ private fun createMockSelfResponseJson() = SelfResponseJson(
 
 private fun createMockSelfRatingsResponseJson() = SelfRatingsResponseJson(
     ratings = listOf(
-        SelfRatingsResponseJson.Rating(
+        Rating(
             recipeId = "recipeId",
             rating = 1.0,
             isFavorite = false,
         )
     ),
+)
+
+private fun createMockRatingForRecipeResponseJson() = Rating(
+    recipeId = "recipeId",
+    rating = 1.0,
+    isFavorite = false,
 )
