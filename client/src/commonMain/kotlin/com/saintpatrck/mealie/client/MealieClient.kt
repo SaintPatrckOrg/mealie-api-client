@@ -1,0 +1,45 @@
+package com.saintpatrck.mealie.client
+
+import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
+import com.saintpatrck.mealie.client.infrastructure.ktorfit.mealieKtorfit
+import com.saintpatrck.mealie.client.model.MealieClientConfig
+import com.saintpatrck.mealie.client.provider.MealieTokenProvider
+import de.jensklingenberg.ktorfit.Ktorfit
+
+/**
+ * Creates a new [MealieClient] with the given [config].
+ */
+fun mealieClient(
+    config: MealieClientConfig.() -> Unit = {},
+): MealieClient = MealieClient(
+    MealieClientConfig().apply(config)
+)
+
+
+/**
+ * Represents a client for the Mealie API.
+ */
+class MealieClient internal constructor(
+    private val mealieClientConfig: MealieClientConfig,
+) {
+    private val ktorfit: Ktorfit by lazy {
+        mealieKtorfit(
+            baseUrlProvider = {
+                mealieClientConfig.baseUrlProvider?.baseUrl.orEmpty()
+            },
+            mealieTokenProvider = object : MealieTokenProvider {
+                override fun getMealieBearerTokens() =
+                    mealieClientConfig.accessTokenProvider()
+
+                override suspend fun refreshMealieBearerTokens(
+                    oldTokens: MealieBearerTokens?,
+                ) =
+                    mealieClientConfig.refreshTokenProvider(oldTokens)
+            },
+            engine = mealieClientConfig.engine,
+            loggingConfig = {
+                apply(mealieClientConfig.loggingConfig)
+            },
+        )
+    }
+}
