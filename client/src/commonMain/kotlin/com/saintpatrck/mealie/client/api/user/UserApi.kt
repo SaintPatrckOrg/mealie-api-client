@@ -32,7 +32,7 @@ interface UserApi {
      *
      * @param recipeId The ID of the recipe.
      */
-    @GET("users/rating/{recipeId}")
+    @GET("users/self/ratings/{recipeId}")
     suspend fun ratingForRecipe(
         @Path("recipeId")
         recipeId: String,
