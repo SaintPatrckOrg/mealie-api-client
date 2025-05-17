@@ -12,50 +12,74 @@ import kotlin.test.assertEquals
 
 class ErrorResponseJsonSerializerTest : BaseApiTest() {
     @Test
-    fun `failure with short error should be deserialized correctly`() = runTest {
+    fun `Unauthorized response should be deserialized correctly`() = runTest {
         createTestMealieClient(
-            responseJson = SHORT_ERROR_RESPONSE,
-            status = HttpStatusCode.BadRequest,
+            responseJson = UNAUTHORIZED_ERROR_RESPONSE,
+            status = HttpStatusCode.Unauthorized,
             headers = headersOf(HttpHeaders.ContentType, "application/json"),
         )
             .authApi
             .logout()
             .also { response ->
                 assertEquals(
-                    createMockShortErrorResponseJson(),
+                    createMockUnauthorizedResponseJson(),
                     response.failureOrNull()?.error,
                 )
             }
     }
 
     @Test
-    fun `failure with detailed error should be deserialized correctly`() = runTest {
+    fun `Validation response should be deserialized correctly`() = runTest {
         createTestMealieClient(
-            responseJson = ERROR_RESPONSE,
-            status = HttpStatusCode.BadRequest,
+            responseJson = VALIDATION_ERROR_RESPONSE,
+            status = HttpStatusCode.UnprocessableEntity,
             headers = headersOf(HttpHeaders.ContentType, "application/json"),
         )
             .authApi
             .logout()
             .also { response ->
                 assertEquals(
-                    createMockDetailedErrorResponseJson(),
+                    createMockValidationErrorResponseJson(),
+                    response.failureOrNull()?.error,
+                )
+            }
+    }
+
+    @Test
+    fun `Forbidden response should be deserialized correctly`() = runTest {
+        createTestMealieClient(
+            responseJson = FORBIDDEN_ERROR_RESPONSE,
+            status = HttpStatusCode.Forbidden,
+            headers = headersOf(HttpHeaders.ContentType, "application/json"),
+        )
+            .authApi
+            .logout()
+            .also { response ->
+                assertEquals(
+                    createMockForbiddenResponseJson(),
                     response.failureOrNull()?.error,
                 )
             }
     }
 }
 
-private val SHORT_ERROR_RESPONSE = """
+private val UNAUTHORIZED_ERROR_RESPONSE = """
 {
     "detail": "string"
 }
 """
     .trimIndent()
 
-private val ERROR_RESPONSE = """
+private val VALIDATION_ERROR_RESPONSE = """
 {
   "detail": [
+    {
+      "loc": [
+        "string"
+      ],
+      "msg": "string",
+      "type": "string"
+    },
     {
       "loc": [
         "string"
@@ -68,16 +92,40 @@ private val ERROR_RESPONSE = """
 """
     .trimIndent()
 
-private fun createMockDetailedErrorResponseJson() = ErrorResponseJson.DetailedError(
+private val FORBIDDEN_ERROR_RESPONSE = """
+{
+    "detail": {
+        "message": "string",
+        "error": true,
+        "exception": null
+    }
+}
+"""
+    .trimIndent()
+
+private fun createMockValidationErrorResponseJson() = ErrorResponseJson.ValidationErrors(
     detail = listOf(
-        ErrorResponseJson.DetailedError.ErrorDetail(
+        ErrorResponseJson.ValidationErrors.ValidationError(
             location = listOf("string"),
             message = "string",
             type = "string",
-        )
+        ),
+        ErrorResponseJson.ValidationErrors.ValidationError(
+            location = listOf("string"),
+            message = "string",
+            type = "string",
+        ),
     )
 )
 
-private fun createMockShortErrorResponseJson() = ErrorResponseJson.ShortError(
+private fun createMockUnauthorizedResponseJson() = ErrorResponseJson.Unauthorized(
     detail = "string",
+)
+
+private fun createMockForbiddenResponseJson() = ErrorResponseJson.Forbidden(
+    detail = ErrorResponseJson.Forbidden.Detail(
+        message = "string",
+        error = true,
+        exception = null,
+    )
 )
