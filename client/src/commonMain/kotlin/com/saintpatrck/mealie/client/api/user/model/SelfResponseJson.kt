@@ -1,11 +1,12 @@
-package com.saintpatrck.mealie.client.api.registration.model
+package com.saintpatrck.mealie.client.api.user.model
 
 import com.saintpatrck.mealie.client.api.model.MealieToken
+import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a response from the login endpoint.
+ * Represents a response from the users/self endpoint.
  *
  * @property id The ID of the user.
  * @property email The email of the user.
@@ -28,7 +29,7 @@ import kotlinx.serialization.Serializable
  * @property cacheKey The cache key associated with the user.
  */
 @Serializable
-data class RegisterUserResponseJson(
+data class SelfResponseJson(
     @SerialName("id")
     val id: String,
     @SerialName("email")
