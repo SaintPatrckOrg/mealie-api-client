@@ -7,6 +7,7 @@ import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
+import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
@@ -57,5 +58,14 @@ interface UserApi {
     suspend fun updatePassword(
         @Body
         updatePasswordRequestJson: UpdatePasswordRequestJson,
+    ): MealieResponse<Unit>
+
+    @Headers("Content-Type: application/json")
+    @PUT("users/{userId}")
+    suspend fun updateUser(
+        @Path("userId")
+        userId: String,
+        @Body
+        updateUserRequestJson: UpdateUserRequestJson,
     ): MealieResponse<Unit>
 }
