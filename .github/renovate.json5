@@ -43,6 +43,8 @@
         '/com.android.application/',
         '/com.android.library/',
         '/org.jetbrains.kotlin.*/',
+        '/com.google.devtools.ksp/',
+        '/com.android.tools.build.gradle/'
       ],
     },
     {
