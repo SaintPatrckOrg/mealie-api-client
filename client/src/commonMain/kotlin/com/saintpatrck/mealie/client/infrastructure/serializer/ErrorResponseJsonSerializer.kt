@@ -6,6 +6,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonObject
 
@@ -19,8 +20,9 @@ internal object ErrorResponseJsonSerializer :
     ): DeserializationStrategy<ErrorResponseJson> {
         val jsonObject = element.jsonObject
         return when {
-            jsonObject["detail"] is JsonPrimitive -> ErrorResponseJson.ShortError.serializer()
-            jsonObject["detail"] is JsonArray -> ErrorResponseJson.DetailedError.serializer()
+            jsonObject["detail"] is JsonPrimitive -> ErrorResponseJson.Unauthorized.serializer()
+            jsonObject["detail"] is JsonObject -> ErrorResponseJson.Forbidden.serializer()
+            jsonObject["detail"] is JsonArray -> ErrorResponseJson.ValidationErrors.serializer()
             else -> throw SerializationException("Unknown error response format: $jsonObject")
         }
     }
