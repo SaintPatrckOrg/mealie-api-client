@@ -6,7 +6,11 @@ import com.saintpatrck.mealie.client.api.model.Rating
 import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
+import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
+import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 
 /**
@@ -44,4 +48,14 @@ interface UserApi {
      */
     @GET("users/self/favorites")
     suspend fun favorites(): MealieResponse<SelfFavoritesResponseJson>
+
+    /**
+     * Changes the current user's password.
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("users/self/password")
+    suspend fun updatePassword(
+        @Body
+        updatePasswordRequestJson: UpdatePasswordRequestJson,
+    ): MealieResponse<Unit>
 }
