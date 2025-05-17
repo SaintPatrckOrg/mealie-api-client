@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents a response from the login endpoint.
+ * Represents a response from the users/self endpoint.
  *
  * @property id The ID of the user.
  * @property email The email of the user.
