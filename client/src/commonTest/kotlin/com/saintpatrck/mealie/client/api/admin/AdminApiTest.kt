@@ -3,6 +3,7 @@ package com.saintpatrck.mealie.client.api.admin
 import com.saintpatrck.mealie.client.api.admin.model.UserResponseJson
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MealieToken
+import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
 import kotlinx.coroutines.test.runTest
@@ -33,6 +34,19 @@ class AdminApiTest : BaseApiTest() {
                 assertEquals(
                     Unit,
                     response.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `getAllUsers should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = GET_ALL_USERS_RESPONSE_JSON)
+            .adminApi
+            .getAllUsers()
+            .also {
+                assertEquals(
+                    createMockPagedUserResponseJson(),
+                    it.getOrNull(),
                 )
             }
     }
@@ -69,6 +83,21 @@ private val GET_USER_RESPONSE_JSON = """
 """
     .trimIndent()
 
+private val GET_ALL_USERS_RESPONSE_JSON = """
+{
+  "page": 1,
+  "per_page": 10,
+  "total": 0,
+  "total_pages": 0,
+  "items": [
+    $GET_USER_RESPONSE_JSON
+  ],
+  "next": "string",
+  "previous": "string"
+}
+"""
+    .trimIndent()
+
 
 private fun createMockUserResponseJson() = UserResponseJson(
     id = "id",
@@ -97,3 +126,13 @@ private fun createMockUserResponseJson() = UserResponseJson(
     ),
     cacheKey = "cacheKey",
 )
+
+private fun createMockPagedUserResponseJson(): PagedResponseJson<UserResponseJson> =
+    PagedResponseJson(
+        page = 1,
+        perPage = 10,
+        totalPages = 0,
+        items = listOf(createMockUserResponseJson()),
+        next = "string",
+        previous = "string",
+    )
