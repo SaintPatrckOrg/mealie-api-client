@@ -23,6 +23,19 @@ class AdminApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `deleteUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .adminApi
+            .deleteUser("userId")
+            .also { response ->
+                assertEquals(
+                    Unit,
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
 private val GET_USER_RESPONSE_JSON = """
