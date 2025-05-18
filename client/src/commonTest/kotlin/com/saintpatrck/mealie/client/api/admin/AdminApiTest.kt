@@ -1,5 +1,6 @@
 package com.saintpatrck.mealie.client.api.admin
 
+import com.saintpatrck.mealie.client.api.admin.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.admin.model.UserResponseJson
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MealieToken
@@ -14,7 +15,7 @@ class AdminApiTest : BaseApiTest() {
 
     @Test
     fun `getUser should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = GET_USER_RESPONSE_JSON)
+        createTestMealieClient(responseJson = USER_RESPONSE_JSON)
             .adminApi
             .getUser("userId")
             .also { response ->
@@ -50,9 +51,38 @@ class AdminApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `createUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = USER_RESPONSE_JSON)
+            .adminApi
+            .createUser(
+                user = CreateUserRequestJson(
+                    username = "username",
+                    fullName = "fullName",
+                    email = "email",
+                    authMethod = MealieAuthMethod.MEALIE,
+                    admin = false,
+                    group = "group",
+                    household = "household",
+                    advanced = false,
+                    canInvite = false,
+                    canManage = false,
+                    canManageHousehold = false,
+                    canOrganize = false,
+                    password = "password",
+                )
+            )
+            .also {
+                assertEquals(
+                    createMockUserResponseJson(),
+                    it.getOrNull(),
+                )
+            }
+    }
 }
 
-private val GET_USER_RESPONSE_JSON = """
+private val USER_RESPONSE_JSON = """
 {
   "id": "id",
   "username": "username",
@@ -90,14 +120,13 @@ private val GET_ALL_USERS_RESPONSE_JSON = """
   "total": 0,
   "total_pages": 0,
   "items": [
-    $GET_USER_RESPONSE_JSON
+    $USER_RESPONSE_JSON
   ],
   "next": "string",
   "previous": "string"
 }
 """
     .trimIndent()
-
 
 private fun createMockUserResponseJson() = UserResponseJson(
     id = "id",
