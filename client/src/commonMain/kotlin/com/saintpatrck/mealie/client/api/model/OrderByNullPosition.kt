@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the order direction for sorting.
+ * Represents the position of null values when sorting results.
  */
 @Serializable
 enum class OrderByNullPosition {
