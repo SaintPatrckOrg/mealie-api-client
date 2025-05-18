@@ -2,6 +2,8 @@ package com.saintpatrck.mealie.client
 
 import com.saintpatrck.mealie.client.api.about.AboutApi
 import com.saintpatrck.mealie.client.api.about.createAboutApi
+import com.saintpatrck.mealie.client.api.admin.AdminApi
+import com.saintpatrck.mealie.client.api.admin.createAdminApi
 import com.saintpatrck.mealie.client.api.auth.AuthApi
 import com.saintpatrck.mealie.client.api.auth.createAuthApi
 import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
@@ -55,6 +57,13 @@ class MealieClient internal constructor(
      */
     val aboutApi: AboutApi by lazy {
         ktorfit.createAboutApi()
+    }
+
+    /**
+     * The API for administering users.
+     */
+    val adminApi: AdminApi by lazy {
+        ktorfit.createAdminApi()
     }
 
     /**
