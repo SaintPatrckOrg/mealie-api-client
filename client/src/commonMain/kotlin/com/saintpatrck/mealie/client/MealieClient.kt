@@ -7,6 +7,8 @@ import com.saintpatrck.mealie.client.api.admin.createAdminApi
 import com.saintpatrck.mealie.client.api.auth.AuthApi
 import com.saintpatrck.mealie.client.api.auth.createAuthApi
 import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
+import com.saintpatrck.mealie.client.api.password.PasswordApi
+import com.saintpatrck.mealie.client.api.password.createPasswordApi
 import com.saintpatrck.mealie.client.api.registration.RegistrationApi
 import com.saintpatrck.mealie.client.api.registration.createRegistrationApi
 import com.saintpatrck.mealie.client.api.user.UserApi
@@ -71,6 +73,13 @@ class MealieClient internal constructor(
      */
     val authApi: AuthApi by lazy {
         ktorfit.createAuthApi()
+    }
+
+    /**
+     * The API for resetting a password.
+     */
+    val passwordApi: PasswordApi by lazy {
+        ktorfit.createPasswordApi()
     }
 
     /**
