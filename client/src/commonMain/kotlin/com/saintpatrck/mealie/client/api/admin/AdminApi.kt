@@ -1,12 +1,16 @@
 package com.saintpatrck.mealie.client.api.admin
 
+import com.saintpatrck.mealie.client.api.admin.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.admin.model.UserResponseJson
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.model.OrderByNullPosition
 import com.saintpatrck.mealie.client.api.model.OrderDirection
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
+import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Headers
+import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 
@@ -53,4 +57,13 @@ interface AdminApi {
         @Query("pageSize")
         perPage: Int = 50,
     ): MealieResponse<PagedResponseJson<UserResponseJson>>
+
+    /**
+     * Creates a new user.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("users")
+    suspend fun createUser(
+        @Body user: CreateUserRequestJson,
+    ): MealieResponse<UserResponseJson>
 }
