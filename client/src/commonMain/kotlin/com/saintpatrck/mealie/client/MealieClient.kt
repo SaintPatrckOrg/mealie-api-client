@@ -2,15 +2,9 @@ package com.saintpatrck.mealie.client
 
 import com.saintpatrck.mealie.client.api.about.AboutApi
 import com.saintpatrck.mealie.client.api.about.createAboutApi
-import com.saintpatrck.mealie.client.api.admin.AdminApi
-import com.saintpatrck.mealie.client.api.admin.createAdminApi
 import com.saintpatrck.mealie.client.api.auth.AuthApi
 import com.saintpatrck.mealie.client.api.auth.createAuthApi
 import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
-import com.saintpatrck.mealie.client.api.password.PasswordApi
-import com.saintpatrck.mealie.client.api.password.createPasswordApi
-import com.saintpatrck.mealie.client.api.registration.RegistrationApi
-import com.saintpatrck.mealie.client.api.registration.createRegistrationApi
 import com.saintpatrck.mealie.client.api.user.UserApi
 import com.saintpatrck.mealie.client.api.user.createUserApi
 import com.saintpatrck.mealie.client.infrastructure.ktorfit.mealieKtorfit
@@ -62,31 +56,10 @@ class MealieClient internal constructor(
     }
 
     /**
-     * The API for administering users.
-     */
-    val adminApi: AdminApi by lazy {
-        ktorfit.createAdminApi()
-    }
-
-    /**
      * The API for authenticating with the Mealie instance.
      */
     val authApi: AuthApi by lazy {
         ktorfit.createAuthApi()
-    }
-
-    /**
-     * The API for resetting a password.
-     */
-    val passwordApi: PasswordApi by lazy {
-        ktorfit.createPasswordApi()
-    }
-
-    /**
-     * The API for registering a new user with the Mealie instance.
-     */
-    val registrationApi: RegistrationApi by lazy {
-        ktorfit.createRegistrationApi()
     }
 
     /**
