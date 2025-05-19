@@ -1,4 +1,4 @@
-package com.saintpatrck.mealie.client.api.password.model
+package com.saintpatrck.mealie.client.api.user.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

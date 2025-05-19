@@ -1,4 +1,4 @@
-package com.saintpatrck.mealie.client.api.registration.model
+package com.saintpatrck.mealie.client.api.user.model
 
 import kotlinx.serialization.Serializable
 

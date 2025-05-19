@@ -1,7 +1,6 @@
 package com.saintpatrck.mealie.client.api.user.model
 
 import com.saintpatrck.mealie.client.api.model.MealieToken
-import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

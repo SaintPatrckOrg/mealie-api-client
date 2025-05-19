@@ -2,14 +2,21 @@ package com.saintpatrck.mealie.client.api.user
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MealieToken
+import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.Rating
 import com.saintpatrck.mealie.client.api.model.getOrNull
-import com.saintpatrck.mealie.client.api.registration.model.MealieAuthMethod
+import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
+import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
+import com.saintpatrck.mealie.client.api.user.model.MealieAuthMethod
+import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
+import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
+import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
+import com.saintpatrck.mealie.client.api.user.model.UserResponseJson
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -115,8 +122,170 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `getUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = USER_RESPONSE_JSON)
+            .userApi
+            .getUser("userId")
+            .also { response ->
+                assertEquals(
+                    createMockUserResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `deleteUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .deleteUser("userId")
+            .also { response ->
+                assertEquals(
+                    Unit,
+                    response.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `getAllUsers should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = GET_ALL_USERS_RESPONSE_JSON)
+            .userApi
+            .getAllUsers()
+            .also {
+                assertEquals(
+                    createMockPagedUserResponseJson(),
+                    it.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `createUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = USER_RESPONSE_JSON)
+            .userApi
+            .createUser(
+                user = CreateUserRequestJson(
+                    username = "username",
+                    fullName = "fullName",
+                    email = "email",
+                    authMethod = MealieAuthMethod.MEALIE,
+                    admin = false,
+                    group = "group",
+                    household = "household",
+                    advanced = false,
+                    canInvite = false,
+                    canManage = false,
+                    canManageHousehold = false,
+                    canOrganize = false,
+                    password = "password",
+                )
+            )
+            .also {
+                assertEquals(
+                    createMockUserResponseJson(),
+                    it.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `forgotPassword should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .forgotPassword(
+                forgotPasswordRequest = ForgotPasswordRequestJson(
+                    email = "email",
+                )
+            )
+            .also {
+                assertEquals(
+                    Unit,
+                    it.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `resetPassword should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .resetPassword(
+                resetPasswordRequest = ResetPasswordRequestJson(
+                    token = "token",
+                    email = "email",
+                    password = "password",
+                    passwordConfirm = "passwordConfirm",
+                )
+            )
+            .also {
+                assertEquals(
+                    Unit,
+                    it.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `registerUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = REGISTER_USER_RESPONSE_JSON)
+            .userApi
+            .registerUser(
+                user = RegisterUserRequestJson(
+                    email = "test@email.com",
+                    fullName = "Test",
+                    password = "password",
+                    passwordConfirm = "password",
+                    username = "username",
+                    group = null,
+                    household = null,
+                    groupToken = null,
+                    advanced = false,
+                    private = true,
+                    seedData = false,
+                    locale = "en-US",
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    createMockRegisterUserResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
+private const val REGISTER_USER_RESPONSE_JSON = """
+{
+  "username": "username",
+  "email": "test@email.com",
+  "fullName": "fullName",
+  "group": "group",
+  "household": "householdId",
+  "groupId": "groupId",
+  "advanced": false,
+  "canManageHousehold": false,
+  "id": "id",
+  "authMethod": "MEALIE",
+  "admin": false,
+  "canInvite": false,
+  "canManage": false,
+  "canOrganize": false,
+  "groupSlug": "groupSlug",
+  "householdId": "householdId",
+  "householdSlug": "householdSlug",
+  "tokens": [
+    {
+      "id": "id",
+      "name": "name",
+      "createdAt": "createdAt"
+    }
+  ],
+  "cacheKey": "cacheKey"
+}
+"""
 private val SELF_RESPONSE_JSON = """
 {
   "username": "username",
@@ -179,6 +348,87 @@ private val SELF_FAVORITES_RESPONSE_JSON = """
 }
 """
     .trimIndent()
+private val USER_RESPONSE_JSON = """
+{
+  "id": "id",
+  "username": "username",
+  "email": "email",
+  "fullName": "fullName",
+  "group": "group",
+  "household": "household",
+  "groupId": "groupId",
+  "advanced": false,
+  "canManageHousehold": false,
+  "authMethod": "MEALIE",
+  "admin": false,
+  "canInvite": false,
+  "canManage": false,
+  "canOrganize": false,
+  "groupSlug": "groupSlug",
+  "householdId": "householdId",
+  "householdSlug": "householdSlug",
+  "tokens": [
+    {
+      "id": "id",
+      "name": "name",
+      "createdAt": "createdAt"
+    }
+  ],
+  "cacheKey": "cacheKey"
+}    
+"""
+    .trimIndent()
+private val GET_ALL_USERS_RESPONSE_JSON = """
+{
+  "page": 1,
+  "per_page": 10,
+  "total": 0,
+  "total_pages": 0,
+  "items": [
+    $USER_RESPONSE_JSON
+  ],
+  "next": "string",
+  "previous": "string"
+}
+""".trimIndent()
+
+private fun createMockUserResponseJson() = UserResponseJson(
+    id = "id",
+    username = "username",
+    fullName = "fullName",
+    email = "email",
+    authMethod = MealieAuthMethod.MEALIE,
+    admin = false,
+    group = "group",
+    household = "household",
+    advanced = false,
+    canInvite = false,
+    canManage = false,
+    canManageHousehold = false,
+    canOrganize = false,
+    groupId = "groupId",
+    groupSlug = "groupSlug",
+    householdId = "householdId",
+    householdSlug = "householdSlug",
+    tokens = listOf(
+        MealieToken(
+            id = "id",
+            name = "name",
+            createdAt = "createdAt",
+        )
+    ),
+    cacheKey = "cacheKey",
+)
+
+private fun createMockPagedUserResponseJson(): PagedResponseJson<UserResponseJson> =
+    PagedResponseJson(
+        page = 1,
+        perPage = 10,
+        totalPages = 0,
+        items = listOf(createMockUserResponseJson()),
+        next = "string",
+        previous = "string",
+    )
 
 private fun createMockSelfResponseJson() = SelfResponseJson(
     id = "id",
@@ -234,3 +484,30 @@ private fun createMockSelfFavoritesResponseJson() = SelfFavoritesResponseJson(
     ),
 )
 
+fun createMockRegisterUserResponseJson() = RegisterUserResponseJson(
+    username = "username",
+    email = "test@email.com",
+    fullName = "fullName",
+    group = "group",
+    household = "householdId",
+    groupId = "groupId",
+    advanced = false,
+    canManageHousehold = false,
+    id = "id",
+    authMethod = MealieAuthMethod.MEALIE,
+    admin = false,
+    canInvite = false,
+    canManage = false,
+    canOrganize = false,
+    groupSlug = "groupSlug",
+    householdId = "householdId",
+    householdSlug = "householdSlug",
+    tokens = listOf(
+        MealieToken(
+            id = "id",
+            name = "name",
+            createdAt = "createdAt",
+        )
+    ),
+    cacheKey = "cacheKey",
+)
