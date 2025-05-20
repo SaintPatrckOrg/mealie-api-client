@@ -5,6 +5,8 @@ import com.saintpatrck.mealie.client.api.model.MealieToken
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.Rating
 import com.saintpatrck.mealie.client.api.model.getOrNull
+import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenRequestJson
+import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.MealieAuthMethod
@@ -18,6 +20,7 @@ import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UserResponseJson
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -255,9 +258,36 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `createApiToken should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = CREATE_API_TOKEN_RESPONSE_JSON)
+            .userApi
+            .createApiToken(
+                createApiTokenRequestJson = CreateApiTokenRequestJson(
+                    name = "name",
+                    integrationId = "integrationId",
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    createMockCreateApiTokenResponse(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
-private const val REGISTER_USER_RESPONSE_JSON = """
+private val CREATE_API_TOKEN_RESPONSE_JSON = """
+{
+  "name": "name",
+  "id": 0,
+  "createdAt": "2019-08-24T14:15:22Z",
+  "token": "token"
+} 
+"""
+    .trimIndent()
+private val REGISTER_USER_RESPONSE_JSON = """
 {
   "username": "username",
   "email": "test@email.com",
@@ -286,6 +316,7 @@ private const val REGISTER_USER_RESPONSE_JSON = """
   "cacheKey": "cacheKey"
 }
 """
+    .trimIndent()
 private val SELF_RESPONSE_JSON = """
 {
   "username": "username",
@@ -510,4 +541,11 @@ fun createMockRegisterUserResponseJson() = RegisterUserResponseJson(
         )
     ),
     cacheKey = "cacheKey",
+)
+
+fun createMockCreateApiTokenResponse() = CreateApiTokenResponseJson(
+    name = "name",
+    id = 0,
+    createdAt = Instant.parse("2019-08-24T14:15:22Z"),
+    token = "token",
 )

@@ -6,6 +6,8 @@ import com.saintpatrck.mealie.client.api.model.OrderByNullPosition
 import com.saintpatrck.mealie.client.api.model.OrderDirection
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.Rating
+import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenRequestJson
+import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
@@ -159,4 +161,14 @@ interface UserApi {
         @Body
         resetPasswordRequest: ResetPasswordRequestJson,
     ): MealieResponse<Unit>
+
+    /**
+     * Creates a new API token for the current user.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("users/api-tokens")
+    suspend fun createApiToken(
+        @Body
+        createApiTokenRequestJson: CreateApiTokenRequestJson,
+    ): MealieResponse<CreateApiTokenResponseJson>
 }
