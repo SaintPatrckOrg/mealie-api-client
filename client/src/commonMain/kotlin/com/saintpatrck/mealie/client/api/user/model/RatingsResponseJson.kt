@@ -5,12 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the response from the /users/self/ratings endpoint.
+ * Models a collection of [Rating].
  *
  * @property ratings The list of ratings.
  */
 @Serializable
-data class SelfRatingsResponseJson(
+data class RatingsResponseJson(
     @SerialName("ratings")
     val ratings: List<Rating>,
 )
