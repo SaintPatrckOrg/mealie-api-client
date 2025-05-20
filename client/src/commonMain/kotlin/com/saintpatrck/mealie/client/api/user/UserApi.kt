@@ -11,11 +11,11 @@ import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.DeleteTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
+import com.saintpatrck.mealie.client.api.user.model.RatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
-import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
@@ -52,7 +52,7 @@ interface UserApi {
      * Retrieves the current user's rated recipes.
      */
     @GET("users/self/ratings")
-    suspend fun ratings(): MealieResponse<SelfRatingsResponseJson>
+    suspend fun ratings(): MealieResponse<RatingsResponseJson>
 
     /**
      * Retrieves the current user's rating for a specific recipe.
@@ -181,4 +181,13 @@ interface UserApi {
         @Path("tokenId")
         token: Int,
     ): MealieResponse<DeleteTokenResponseJson>
+
+    /**
+     * Get ratings for the user with the given [userId].
+     */
+    @GET("users/{userId}/ratings")
+    suspend fun getRatingsForUser(
+        @Path("userId")
+        userId: String,
+    ): MealieResponse<RatingsResponseJson>
 }

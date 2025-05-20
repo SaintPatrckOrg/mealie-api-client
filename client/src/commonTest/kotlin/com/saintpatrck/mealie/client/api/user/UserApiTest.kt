@@ -11,11 +11,11 @@ import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.DeleteTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.MealieAuthMethod
+import com.saintpatrck.mealie.client.api.user.model.RatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
-import com.saintpatrck.mealie.client.api.user.model.SelfRatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
@@ -42,12 +42,12 @@ class UserApiTest : BaseApiTest() {
 
     @Test
     fun `ratings should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = SELF_RATINGS_RESPONSE_JSON)
+        createTestMealieClient(responseJson = RATINGS_RESPONSE_JSON)
             .userApi
             .ratings()
             .also { response ->
                 assertEquals(
-                    createMockSelfRatingsResponseJson(),
+                    createMockRatingsResponseJson(),
                     response.getOrNull(),
                 )
             }
@@ -290,6 +290,19 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `getRatingsForUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = RATINGS_RESPONSE_JSON)
+            .userApi
+            .getRatingsForUser("userId")
+            .also { response ->
+                assertEquals(
+                    createMockRatingsResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
 private val DELETE_TOKEN_RESPONSE_JSON = """
@@ -367,7 +380,7 @@ private val SELF_RESPONSE_JSON = """
 }
 """
     .trimIndent()
-private val SELF_RATINGS_RESPONSE_JSON = """
+private val RATINGS_RESPONSE_JSON = """
 {
   "ratings": [
     {
@@ -509,7 +522,7 @@ private fun createMockSelfResponseJson() = SelfResponseJson(
     cacheKey = "cacheKey",
 )
 
-private fun createMockSelfRatingsResponseJson() = SelfRatingsResponseJson(
+private fun createMockRatingsResponseJson() = RatingsResponseJson(
     ratings = listOf(
         Rating(
             recipeId = "recipeId",
