@@ -9,6 +9,7 @@ import com.saintpatrck.mealie.client.api.model.Rating
 import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenRequestJson
 import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
+import com.saintpatrck.mealie.client.api.user.model.DeleteTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
@@ -171,4 +172,13 @@ interface UserApi {
         @Body
         createApiTokenRequestJson: CreateApiTokenRequestJson,
     ): MealieResponse<CreateApiTokenResponseJson>
+
+    /**
+     * Deletes an API token for the current user.
+     */
+    @DELETE("users/api-tokens/{tokenId}")
+    suspend fun deleteApiToken(
+        @Path("tokenId")
+        token: Int,
+    ): MealieResponse<DeleteTokenResponseJson>
 }

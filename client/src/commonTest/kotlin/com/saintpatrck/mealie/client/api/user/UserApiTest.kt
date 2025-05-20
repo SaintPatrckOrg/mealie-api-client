@@ -8,6 +8,7 @@ import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenRequestJson
 import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
+import com.saintpatrck.mealie.client.api.user.model.DeleteTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.MealieAuthMethod
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
@@ -276,8 +277,27 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `deleteApiToken should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = DELETE_TOKEN_RESPONSE_JSON)
+            .userApi
+            .deleteApiToken(1)
+            .also { response ->
+                assertEquals(
+                    createMockDeleteJsonResponse(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
+private val DELETE_TOKEN_RESPONSE_JSON = """
+{
+  "tokenDelete": "tokenDelete"
+}
+"""
+    .trimIndent()
 private val CREATE_API_TOKEN_RESPONSE_JSON = """
 {
   "name": "name",
@@ -548,4 +568,8 @@ fun createMockCreateApiTokenResponse() = CreateApiTokenResponseJson(
     id = 0,
     createdAt = Instant.parse("2019-08-24T14:15:22Z"),
     token = "token",
+)
+
+fun createMockDeleteJsonResponse() = DeleteTokenResponseJson(
+    tokenDelete = "tokenDelete",
 )
