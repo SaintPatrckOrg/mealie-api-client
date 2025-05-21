@@ -13,7 +13,7 @@ data class CookbookJson(
     @SerialName("description")
     val description: String,
     @SerialName("slug")
-    val slug: String,
+    val slug: String?,
     @SerialName("position")
     val position: Int,
     @SerialName("public")

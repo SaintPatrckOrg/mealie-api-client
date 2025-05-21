@@ -4,6 +4,7 @@ import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.households.model.CookbookJson
 import com.saintpatrck.mealie.client.api.households.model.CookbookWithRecipesJson
 import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJson
+import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.model.getOrThrow
@@ -73,6 +74,29 @@ class HouseholdsApiTest : BaseApiTest() {
             .also { response ->
                 assertEquals(
                     createMockCookbookWithRecipesJson(),
+                    response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `updateCookbook should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = COOKBOOK_JSON)
+            .householdsApi
+            .updateCookbook(
+                cookbookId = "cookbookId",
+                cookbook = UpdateCookbookRequestJson(
+                    name = "name",
+                    description = "description",
+                    slug = "slug",
+                    position = 1,
+                    public = false,
+                    queryFilterString = "queryFilterString",
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    createMockCookbookJson(),
                     response.getOrThrow(),
                 )
             }
