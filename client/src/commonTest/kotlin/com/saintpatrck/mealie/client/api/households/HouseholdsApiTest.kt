@@ -1,7 +1,7 @@
 package com.saintpatrck.mealie.client.api.households
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
-import com.saintpatrck.mealie.client.api.households.model.CookbooksResponseJson
+import com.saintpatrck.mealie.client.api.households.model.CookbookJson
 import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
@@ -27,7 +27,7 @@ class HouseholdsApiTest : BaseApiTest() {
 
     @Test
     fun `createCookbook should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = CREATE_COOKBOOK_RESPONSE_JSON)
+        createTestMealieClient(responseJson = COOKBOOK_JSON)
             .householdsApi
             .createCookbook(
                 cookbook = CreateCookbookRequestJson(
@@ -40,11 +40,27 @@ class HouseholdsApiTest : BaseApiTest() {
             )
             .also { response ->
                 assertEquals(
-                    createMockCookbookResponseJson(),
+                    createMockCookbookJson(),
                     response.getOrThrow(),
                 )
             }
     }
+
+    @Test
+    fun `bulkUpdateCookbooks should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = BULK_UPDATE_RESPONSE_JSON)
+            .householdsApi
+            .bulkUpdateCookbooks(
+                bulkUpdateRequest = listOf(createMockCookbookJson())
+            )
+            .also { response ->
+                assertEquals(
+                    listOf(createMockCookbookJson()),
+                    response.getOrThrow(),
+                )
+            }
+    }
+
 }
 
 private val GET_COOKBOOKS_RESPONSE_JSON = """
@@ -74,7 +90,7 @@ private val GET_COOKBOOKS_RESPONSE_JSON = """
 }
 """
     .trimIndent()
-private val CREATE_COOKBOOK_RESPONSE_JSON = """
+private val COOKBOOK_JSON = """
 {
   "name": "name",
   "description": "description",
@@ -91,17 +107,35 @@ private val CREATE_COOKBOOK_RESPONSE_JSON = """
 }
 """
     .trimIndent()
+private val BULK_UPDATE_RESPONSE_JSON = """
+[
+  {
+    "name": "name",
+    "description": "description",
+    "slug": "slug",
+    "position": 1,
+    "public": false,
+    "queryFilterString": "queryFilterString",
+    "groupId": "groupId",
+    "householdId": "householdId",
+    "id": "id",
+    "queryFilter": {
+      "parts": []
+    }
+  }
+]
+""".trimIndent()
 
 private fun createMockPagedCookbooksResponseJson() = PagedResponseJson(
     page = 1,
     perPage = 10,
     totalPages = 0,
-    items = listOf(createMockCookbookResponseJson()),
+    items = listOf(createMockCookbookJson()),
     next = "next",
     previous = "previous"
 )
 
-private fun createMockCookbookResponseJson() = CookbooksResponseJson(
+private fun createMockCookbookJson() = CookbookJson(
     id = "id",
     name = "name",
     description = "description",

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * Models a cookbook.
  */
 @Serializable
-data class CookbooksResponseJson(
+data class CookbookJson(
     @SerialName("name")
     val name: String,
     @SerialName("description")
