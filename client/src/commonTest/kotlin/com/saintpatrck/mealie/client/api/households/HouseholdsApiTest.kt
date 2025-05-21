@@ -101,6 +101,21 @@ class HouseholdsApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `deleteCookbook should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = COOKBOOK_JSON)
+            .householdsApi
+            .deleteCookbook(
+                cookbookId = "cookbookId"
+            )
+            .also { response ->
+                assertEquals(
+                    createMockCookbookJson(),
+                    response.getOrThrow(),
+                )
+            }
+    }
 }
 
 private val GET_COOKBOOKS_RESPONSE_JSON = """
