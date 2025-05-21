@@ -218,4 +218,18 @@ interface UserApi {
         @Body
         rating: SetRatingRequestJson,
     ): MealieResponse<Unit>
+
+    /**
+     * Add a recipe to the user's favorites.
+     *
+     * @param userId The ID of the user.
+     * @param recipeId The ID of the recipe.
+     */
+    @POST("users/{userId}/favorites/{recipeId}")
+    suspend fun addFavorite(
+        @Path("userId")
+        userId: String,
+        @Path("recipeId")
+        recipeId: String,
+    ): MealieResponse<Unit>
 }

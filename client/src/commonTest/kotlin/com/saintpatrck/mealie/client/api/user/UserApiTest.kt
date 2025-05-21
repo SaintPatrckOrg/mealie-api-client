@@ -337,6 +337,22 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `addFavorite should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .addFavorite(
+                userId = "userId",
+                recipeId = "recipeId",
+            )
+            .also { response ->
+                assertEquals(
+                    Unit,
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
 private val DELETE_TOKEN_RESPONSE_JSON = """
