@@ -17,6 +17,7 @@ import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
+import com.saintpatrck.mealie.client.api.user.model.SetRatingRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UserResponseJson
@@ -312,6 +313,26 @@ class UserApiTest : BaseApiTest() {
             .also { response ->
                 assertEquals(
                     createMockFavoritesResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `setRating should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .setRating(
+                userId = "userId",
+                recipeId = "recipeId",
+                rating = SetRatingRequestJson(
+                    rating = 1.0,
+                    isFavorite = false,
+                ),
+            )
+            .also { response ->
+                assertEquals(
+                    Unit,
                     response.getOrNull(),
                 )
             }
