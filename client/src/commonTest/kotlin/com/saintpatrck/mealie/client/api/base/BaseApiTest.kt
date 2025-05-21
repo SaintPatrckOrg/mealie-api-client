@@ -7,6 +7,7 @@ import com.saintpatrck.mealie.client.provider.MealieTokenProvider
 import createMockEngine
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.request.HttpRequestData
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
@@ -41,11 +42,13 @@ abstract class BaseApiTest {
         responseJson: String,
         status: HttpStatusCode = HttpStatusCode.OK,
         headers: Headers = headersOf(HttpHeaders.ContentType, "application/json"),
+        verifyRequest: suspend (request: HttpRequestData) -> Unit = {},
     ) = mealieClient {
         engine = createMockEngine(
             response = responseJson,
             status = status,
             headers = headers,
+            verifyRequest = verifyRequest,
         )
         baseUrlProvider = urlProvider
         accessTokenProvider = {
