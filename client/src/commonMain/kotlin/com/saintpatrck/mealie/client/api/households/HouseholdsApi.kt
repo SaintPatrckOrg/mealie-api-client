@@ -1,6 +1,7 @@
 package com.saintpatrck.mealie.client.api.households
 
 import com.saintpatrck.mealie.client.api.households.model.CookbookJson
+import com.saintpatrck.mealie.client.api.households.model.CookbookWithRecipesJson
 import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
@@ -9,6 +10,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
+import de.jensklingenberg.ktorfit.http.Path
 
 /**
  * API for managing household information.
@@ -38,4 +40,13 @@ interface HouseholdsApi {
     suspend fun bulkUpdateCookbooks(
         @Body bulkUpdateRequest: List<CookbookJson>,
     ): MealieResponse<List<CookbookJson>>
+
+    /**
+     * Retrieves a cookbook by its ID.
+     */
+    @GET("households/cookbooks/{cookbookId}")
+    suspend fun getCookbook(
+        @Path("cookbookId")
+        cookbookId: String,
+    ): MealieResponse<CookbookWithRecipesJson>
 }
