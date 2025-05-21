@@ -3,6 +3,7 @@ package com.saintpatrck.mealie.client.api.households
 import com.saintpatrck.mealie.client.api.households.model.CookbookJson
 import com.saintpatrck.mealie.client.api.households.model.CookbookWithRecipesJson
 import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJson
+import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import de.jensklingenberg.ktorfit.http.Body
@@ -49,4 +50,15 @@ interface HouseholdsApi {
         @Path("cookbookId")
         cookbookId: String,
     ): MealieResponse<CookbookWithRecipesJson>
+
+    /**
+     * Update a cookbook.
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("households/cookbooks/{cookbookId}")
+    suspend fun updateCookbook(
+        @Path("cookbookId")
+        cookbookId: String,
+        @Body cookbook: UpdateCookbookRequestJson,
+    ): MealieResponse<CookbookJson>
 }
