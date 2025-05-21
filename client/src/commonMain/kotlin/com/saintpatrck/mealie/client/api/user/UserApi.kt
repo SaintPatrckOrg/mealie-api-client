@@ -17,6 +17,7 @@ import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
+import com.saintpatrck.mealie.client.api.user.model.SetRatingRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UserResponseJson
@@ -199,4 +200,22 @@ interface UserApi {
         @Path("userId")
         userId: String,
     ): MealieResponse<FavoritesResponseJson>
+
+    /**
+     * Set the user's rating for a recipe.
+     *
+     * @param userId The ID of the user.
+     * @param recipeId The ID of the recipe.
+     * @param rating The rating to set.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("users/{userId}/ratings/{recipeId}")
+    suspend fun setRating(
+        @Path("userId")
+        userId: String,
+        @Path("recipeId")
+        recipeId: String,
+        @Body
+        rating: SetRatingRequestJson,
+    ): MealieResponse<Unit>
 }
