@@ -8,6 +8,8 @@ import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJ
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.model.getOrThrow
+import io.ktor.client.engine.mock.toByteArray
+import io.ktor.http.HttpMethod
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test
@@ -65,8 +67,14 @@ class HouseholdsApiTest : BaseApiTest() {
     }
 
     @Test
-    fun `getCookbook should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = COOKBOOK_WITH_RECIPES_JSON)
+    fun `getCookbook should construct request and deserialize response correctly`() = runTest {
+        createTestMealieClient(
+            responseJson = COOKBOOK_WITH_RECIPES_JSON,
+            verifyRequest = { request ->
+                assertEquals(request.method, HttpMethod.Get)
+                assertEquals("/households/cookbooks/cookbookId", request.url.encodedPath)
+            }
+        )
             .householdsApi
             .getCookbook(
                 cookbookId = "cookbookId"
@@ -80,8 +88,18 @@ class HouseholdsApiTest : BaseApiTest() {
     }
 
     @Test
-    fun `updateCookbook should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = COOKBOOK_JSON)
+    fun `updateCookbook should construct request and deserialize response correctly`() = runTest {
+        createTestMealieClient(
+            responseJson = COOKBOOK_JSON,
+            verifyRequest = { request ->
+                assertEquals(request.method, HttpMethod.Put)
+                assertEquals("/households/cookbooks/cookbookId", request.url.encodedPath)
+                assertEquals(
+                    UPDATE_COOKBOOK_REQUEST_JSON,
+                    request.body.toByteArray().decodeToString()
+                )
+            }
+        )
             .householdsApi
             .updateCookbook(
                 cookbookId = "cookbookId",
@@ -118,6 +136,10 @@ class HouseholdsApiTest : BaseApiTest() {
     }
 }
 
+private val UPDATE_COOKBOOK_REQUEST_JSON = """
+{"name":"name","description":"description","slug":"slug","position":1,"public":false,"queryFilterString":"queryFilterString"}
+"""
+    .trimIndent()
 private val GET_COOKBOOKS_RESPONSE_JSON = """
 {
   "page": 1,
