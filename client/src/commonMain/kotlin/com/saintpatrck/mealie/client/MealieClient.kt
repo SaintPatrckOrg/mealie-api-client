@@ -4,6 +4,8 @@ import com.saintpatrck.mealie.client.api.about.AboutApi
 import com.saintpatrck.mealie.client.api.about.createAboutApi
 import com.saintpatrck.mealie.client.api.auth.AuthApi
 import com.saintpatrck.mealie.client.api.auth.createAuthApi
+import com.saintpatrck.mealie.client.api.households.HouseholdsApi
+import com.saintpatrck.mealie.client.api.households.createHouseholdsApi
 import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
 import com.saintpatrck.mealie.client.api.user.UserApi
 import com.saintpatrck.mealie.client.api.user.createUserApi
@@ -67,5 +69,12 @@ class MealieClient internal constructor(
      */
     val userApi: UserApi by lazy {
         ktorfit.createUserApi()
+    }
+
+    /**
+     * The API for managing household information.
+     */
+    val householdsApi: HouseholdsApi by lazy {
+        ktorfit.createHouseholdsApi()
     }
 }
