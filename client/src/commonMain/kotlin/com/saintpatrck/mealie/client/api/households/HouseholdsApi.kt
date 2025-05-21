@@ -7,6 +7,7 @@ import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJ
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.POST
@@ -60,5 +61,14 @@ interface HouseholdsApi {
         @Path("cookbookId")
         cookbookId: String,
         @Body cookbook: UpdateCookbookRequestJson,
+    ): MealieResponse<CookbookJson>
+
+    /**
+     * Delete a cookbook.
+     */
+    @DELETE("households/cookbooks/{cookbookId}")
+    suspend fun deleteCookbook(
+        @Path("cookbookId")
+        cookbookId: String,
     ): MealieResponse<CookbookJson>
 }
