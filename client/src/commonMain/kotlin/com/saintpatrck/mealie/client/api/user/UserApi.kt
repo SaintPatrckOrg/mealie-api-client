@@ -10,12 +10,12 @@ import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenRequestJson
 import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.DeleteTokenResponseJson
+import com.saintpatrck.mealie.client.api.user.model.FavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
-import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
@@ -71,7 +71,7 @@ interface UserApi {
      * Retrieves the current user's favorite recipes.
      */
     @GET("users/self/favorites")
-    suspend fun favorites(): MealieResponse<SelfFavoritesResponseJson>
+    suspend fun favorites(): MealieResponse<FavoritesResponseJson>
 
     /**
      * Changes the current user's password.
@@ -190,4 +190,13 @@ interface UserApi {
         @Path("userId")
         userId: String,
     ): MealieResponse<RatingsResponseJson>
+
+    /**
+     * Get favorites for the user with the given [userId].
+     */
+    @GET("users/{userId}/favorites")
+    suspend fun getFavoritesForUser(
+        @Path("userId")
+        userId: String,
+    ): MealieResponse<FavoritesResponseJson>
 }

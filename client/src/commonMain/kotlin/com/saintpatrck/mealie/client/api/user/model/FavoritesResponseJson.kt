@@ -5,12 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Represents the response from the /users/self/favorites endpoint.
+ * Models a collection of user's favorites recipes.
  *
  * @property ratings The list of users favorite recipes.
  */
 @Serializable
-data class SelfFavoritesResponseJson(
+data class FavoritesResponseJson(
     @SerialName("ratings")
     val ratings: List<Rating>,
 )

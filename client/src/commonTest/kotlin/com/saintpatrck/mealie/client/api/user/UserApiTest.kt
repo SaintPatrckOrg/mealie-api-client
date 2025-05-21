@@ -9,13 +9,13 @@ import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenRequestJson
 import com.saintpatrck.mealie.client.api.user.model.CreateApiTokenResponseJson
 import com.saintpatrck.mealie.client.api.user.model.CreateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.DeleteTokenResponseJson
+import com.saintpatrck.mealie.client.api.user.model.FavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ForgotPasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.MealieAuthMethod
 import com.saintpatrck.mealie.client.api.user.model.RatingsResponseJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.RegisterUserResponseJson
 import com.saintpatrck.mealie.client.api.user.model.ResetPasswordRequestJson
-import com.saintpatrck.mealie.client.api.user.model.SelfFavoritesResponseJson
 import com.saintpatrck.mealie.client.api.user.model.SelfResponseJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
@@ -68,12 +68,12 @@ class UserApiTest : BaseApiTest() {
 
     @Test
     fun `favorites should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = SELF_FAVORITES_RESPONSE_JSON)
+        createTestMealieClient(responseJson = FAVORITES_RESPONSE_JSON)
             .userApi
             .favorites()
             .also { response ->
                 assertEquals(
-                    createMockSelfFavoritesResponseJson(),
+                    createMockFavoritesResponseJson(),
                     response.getOrNull(),
                 )
             }
@@ -303,6 +303,19 @@ class UserApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `getFavoritesForUser should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = FAVORITES_RESPONSE_JSON)
+            .userApi
+            .getFavoritesForUser("userId")
+            .also { response ->
+                assertEquals(
+                    createMockFavoritesResponseJson(),
+                    response.getOrNull(),
+                )
+            }
+    }
 }
 
 private val DELETE_TOKEN_RESPONSE_JSON = """
@@ -400,7 +413,7 @@ private val SELF_RATING_FOR_RECIPE_RESPONSE_JSON = """
 }
 """
     .trimIndent()
-private val SELF_FAVORITES_RESPONSE_JSON = """
+private val FAVORITES_RESPONSE_JSON = """
 {
   "ratings": [
     {
@@ -538,7 +551,7 @@ private fun createMockRatingForRecipeResponseJson() = Rating(
     isFavorite = false,
 )
 
-private fun createMockSelfFavoritesResponseJson() = SelfFavoritesResponseJson(
+private fun createMockFavoritesResponseJson() = FavoritesResponseJson(
     ratings = listOf(
         Rating(
             recipeId = "recipeId",
