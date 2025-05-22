@@ -4,6 +4,7 @@ import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.households.model.CookbookJson
 import com.saintpatrck.mealie.client.api.households.model.CookbookWithRecipesJson
 import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJson
+import com.saintpatrck.mealie.client.api.households.model.EventNotificationJson
 import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
@@ -134,8 +135,79 @@ class HouseholdsApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `getNotifications should deserialize correctly`() = runTest {
+        createTestMealieClient(
+            verifyRequest = { request ->
+                assertEquals(HttpMethod.Get, request.method)
+                assertEquals("/households/events/notifications", request.url.encodedPath)
+                assertEquals("1", request.url.parameters["page"])
+                assertEquals("10", request.url.parameters["perPage"])
+            },
+            responseJson = PAGED_EVENT_NOTIFICATIONS_RESPONSE_JSON,
+        )
+            .householdsApi
+            .getNotifications(
+                page = 1,
+                perPage = 10,
+            )
+            .also { response ->
+                assertEquals(
+                    createMockPagedEventNotificationsResponse(),
+                    response.getOrThrow(),
+                )
+            }
+    }
 }
 
+private val PAGED_EVENT_NOTIFICATIONS_RESPONSE_JSON = """
+{
+  "page": 1,
+  "per_page": 10,
+  "total": 0,
+  "total_pages": 0,
+  "items": [
+    {
+      "id": "id",
+      "name": "name",
+      "enabled": true,
+      "groupId": "groupId",
+      "householdId": "householdId",
+      "options": [
+        {
+          "testMessage": false,
+          "webhookTask": false,
+          "recipeCreated": false,
+          "recipeUpdated": false,
+          "recipeDeleted": false,
+          "userSignup": false,
+          "dataMigrations": false,
+          "dataExport": false,
+          "dataImport": false,
+          "mealplanEntryCreated": false,
+          "shoppingListCreated": false,
+          "shoppingListUpdated": false,
+          "shoppingListDeleted": false,
+          "cookbookCreated": false,
+          "cookbookUpdated": false,
+          "cookbookDeleted": false,
+          "tagCreated": false,
+          "tagUpdated": false,
+          "tagDeleted": false,
+          "categoryCreated": false,
+          "categoryUpdated": false,
+          "categoryDeleted": false,
+          "id": "id"
+        }
+      ]
+    }
+  ],
+  "next": "next",
+  "previous": "previous"
+}
+"""
+    .trimIndent()
 private val UPDATE_COOKBOOK_REQUEST_JSON = """
 {"name":"name","description":"description","slug":"slug","position":1,"public":false,"queryFilterString":"queryFilterString"}
 """
@@ -270,6 +342,51 @@ private val COOKBOOK_WITH_RECIPES_JSON = """
 }
 """
     .trimIndent()
+
+private fun createMockPagedEventNotificationsResponse() = PagedResponseJson(
+    page = 1,
+    perPage = 10,
+    totalPages = 0,
+    items = listOf(createMockEventNotificationJson()),
+    next = "next",
+    previous = "previous",
+)
+
+private fun createMockEventNotificationJson() = EventNotificationJson(
+    id = "id",
+    name = "name",
+    enabled = true,
+    groupId = "groupId",
+    householdId = "householdId",
+    options = listOf(createMockEventNotificationOptionJson())
+)
+
+private fun createMockEventNotificationOptionJson() =
+    EventNotificationJson.EventNotificationOptionJson(
+        testMessage = false,
+        webhookTask = false,
+        recipeCreated = false,
+        recipeUpdated = false,
+        recipeDeleted = false,
+        userSignup = false,
+        dataMigrations = false,
+        dataExport = false,
+        dataImport = false,
+        mealplanEntryCreated = false,
+        shoppingListCreated = false,
+        shoppingListUpdated = false,
+        shoppingListDeleted = false,
+        cookbookCreated = false,
+        cookbookUpdated = false,
+        cookbookDeleted = false,
+        tagCreated = false,
+        tagUpdated = false,
+        tagDeleted = false,
+        categoryCreated = false,
+        categoryUpdated = false,
+        categoryDeleted = false,
+        id = "id"
+    )
 
 private fun createMockPagedCookbooksResponseJson() = PagedResponseJson(
     page = 1,
