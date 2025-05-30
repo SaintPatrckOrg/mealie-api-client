@@ -7,6 +7,10 @@ import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJ
 import com.saintpatrck.mealie.client.api.households.model.EventNotificationJson
 import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
+import com.saintpatrck.mealie.client.api.model.RecipeCategoryJson
+import com.saintpatrck.mealie.client.api.model.RecipeJson
+import com.saintpatrck.mealie.client.api.model.RecipeTagJson
+import com.saintpatrck.mealie.client.api.model.RecipeToolJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.model.getOrThrow
 import io.ktor.client.engine.mock.toByteArray
@@ -422,7 +426,7 @@ private fun createMockCookbookWithRecipesJson() = CookbookWithRecipesJson(
     recipes = listOf(createMockRecipeJson())
 )
 
-private fun createMockRecipeJson() = CookbookWithRecipesJson.RecipeJson(
+private fun createMockRecipeJson() = RecipeJson(
     id = "id",
     userId = "userId",
     householdId = "householdId",
@@ -450,19 +454,19 @@ private fun createMockRecipeJson() = CookbookWithRecipesJson.RecipeJson(
     lastMade = Instant.parse("2019-08-24T14:15:22Z"),
 )
 
-private fun createMockRecipeCategory() = CookbookWithRecipesJson.RecipeJson.RecipeCategory(
+private fun createMockRecipeCategory() = RecipeCategoryJson(
     id = "id",
     name = "name",
     slug = "slug",
 )
 
-private fun createMockRecipeTag() = CookbookWithRecipesJson.RecipeJson.RecipeTag(
+private fun createMockRecipeTag() = RecipeTagJson(
     id = "id",
     name = "name",
     slug = "slug",
 )
 
-private fun createMockRecipeTool() = CookbookWithRecipesJson.RecipeJson.RecipeTool(
+private fun createMockRecipeTool() = RecipeToolJson(
     id = "id",
     name = "name",
     slug = "slug",
