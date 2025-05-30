@@ -2,6 +2,8 @@ package com.saintpatrck.mealie.client.api.recipes
 
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
@@ -42,4 +44,13 @@ interface RecipesApi {
     suspend fun createRecipeFromUrl(
         @Body request: CreateRecipeFromUrlRequestJson,
     ): MealieResponse<String>
+
+    /**
+     * Creates multiple recipes from a list of URLs.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("recipes/create/url/bulk")
+    suspend fun createFromUrlBulk(
+        @Body request: CreateRecipeFromUrlBulkRequestJson,
+    ): MealieResponse<CreateRecipeFromUrlBulkResponseJson>
 }

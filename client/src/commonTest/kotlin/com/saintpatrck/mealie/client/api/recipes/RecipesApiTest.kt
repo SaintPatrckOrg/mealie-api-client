@@ -3,6 +3,8 @@ package com.saintpatrck.mealie.client.api.recipes
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.getOrThrow
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
@@ -67,6 +69,31 @@ class RecipesApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `createRecipeFromUrlBulk should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = CREATE_RECIPE_FROM_URL_BULK_JSON_RESPONSE)
+            .recipesApi
+            .createFromUrlBulk(
+                request = CreateRecipeFromUrlBulkRequestJson(
+                    listOf(
+                        CreateRecipeFromUrlBulkRequestJson.Import(
+                            url = "mockUrl",
+                            categories = emptyList(),
+                            tags = emptyList(),
+                        )
+                    )
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    CreateRecipeFromUrlBulkResponseJson(
+                        reportId = "f7f19343-4139-4e9f-a07e-a6fbfbe08b0f",
+                    ),
+                    response.getOrThrow(),
+                )
+            }
+    }
 }
 
 private const val RECIPE_JSON = """
@@ -96,6 +123,11 @@ private const val RECIPE_JSON = """
 }
 """
 private const val CREATE_RECIPE_FROM_HTML_OR_JSON_RESPONSE = "mockResponse"
+private const val CREATE_RECIPE_FROM_URL_BULK_JSON_RESPONSE = """
+{
+    "reportId": "f7f19343-4139-4e9f-a07e-a6fbfbe08b0f"
+}
+"""
 
 private fun createMockRecipeJson() = TestScrapeUrlResponseJson(
     context = "https://schema.org/",
