@@ -2,6 +2,7 @@ package com.saintpatrck.mealie.client.api.recipes
 
 import com.saintpatrck.mealie.client.api.model.MealieResponse
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import de.jensklingenberg.ktorfit.http.Body
@@ -30,4 +31,15 @@ interface RecipesApi {
     suspend fun createFromHtmlOrJson(
         @Body request: CreateRecipeFromHtmlOrJsonRequestJson,
     ): MealieResponse<String?>
+
+    /**
+     * Creates a recipe from a URL.
+     *
+     * @return The identifying slug of the created recipe.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("recipes/create/url")
+    suspend fun createRecipeFromUrl(
+        @Body request: CreateRecipeFromUrlRequestJson,
+    ): MealieResponse<String>
 }

@@ -3,6 +3,7 @@ package com.saintpatrck.mealie.client.api.recipes
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.getOrThrow
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import kotlinx.coroutines.test.runTest
@@ -43,6 +44,26 @@ class RecipesApiTest : BaseApiTest() {
                 assertEquals(
                     CREATE_RECIPE_FROM_HTML_OR_JSON_RESPONSE,
                     it.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `createRecipeFromUrl should deserialize correctly`() = runTest {
+        createTestMealieClient(
+            responseJson = "mockSlug",
+        )
+            .recipesApi
+            .createRecipeFromUrl(
+                request = CreateRecipeFromUrlRequestJson(
+                    includeTags = false,
+                    url = "mockUrl",
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    "mockSlug",
+                    response.getOrThrow(),
                 )
             }
     }
