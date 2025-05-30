@@ -2,6 +2,7 @@ package com.saintpatrck.mealie.client.api.recipes
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.getOrThrow
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import kotlinx.coroutines.test.runTest
@@ -12,9 +13,7 @@ class RecipesApiTest : BaseApiTest() {
 
     @Test
     fun `testScrapeUrl should deserialize correctly`() = runTest {
-        createTestMealieClient(
-            responseJson = RECIPE_JSON,
-        )
+        createTestMealieClient(responseJson = RECIPE_JSON)
             .recipesApi
             .testScrapeUrl(
                 testScrapeUrlRequest = TestScrapeUrlRequestJson(
@@ -26,6 +25,24 @@ class RecipesApiTest : BaseApiTest() {
                 assertEquals(
                     createMockRecipeJson(),
                     response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `createFromHtmlOrJson should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = CREATE_RECIPE_FROM_HTML_OR_JSON_RESPONSE)
+            .recipesApi
+            .createFromHtmlOrJson(
+                request = CreateRecipeFromHtmlOrJsonRequestJson(
+                    includeTags = false,
+                    data = "data",
+                )
+            )
+            .also {
+                assertEquals(
+                    CREATE_RECIPE_FROM_HTML_OR_JSON_RESPONSE,
+                    it.getOrThrow(),
                 )
             }
     }
@@ -57,6 +74,7 @@ private const val RECIPE_JSON = """
     ]
 }
 """
+private const val CREATE_RECIPE_FROM_HTML_OR_JSON_RESPONSE = "mockResponse"
 
 private fun createMockRecipeJson() = TestScrapeUrlResponseJson(
     context = "https://schema.org/",
