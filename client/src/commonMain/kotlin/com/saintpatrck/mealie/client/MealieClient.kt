@@ -7,6 +7,8 @@ import com.saintpatrck.mealie.client.api.auth.createAuthApi
 import com.saintpatrck.mealie.client.api.households.HouseholdsApi
 import com.saintpatrck.mealie.client.api.households.createHouseholdsApi
 import com.saintpatrck.mealie.client.api.model.MealieBearerTokens
+import com.saintpatrck.mealie.client.api.recipes.RecipesApi
+import com.saintpatrck.mealie.client.api.recipes.createRecipesApi
 import com.saintpatrck.mealie.client.api.user.UserApi
 import com.saintpatrck.mealie.client.api.user.createUserApi
 import com.saintpatrck.mealie.client.infrastructure.ktorfit.mealieKtorfit
@@ -76,5 +78,12 @@ class MealieClient internal constructor(
      */
     val householdsApi: HouseholdsApi by lazy {
         ktorfit.createHouseholdsApi()
+    }
+
+    /**
+     * The API for managing recipe information.
+     */
+    val recipesApi: RecipesApi by lazy {
+        ktorfit.createRecipesApi()
     }
 }
