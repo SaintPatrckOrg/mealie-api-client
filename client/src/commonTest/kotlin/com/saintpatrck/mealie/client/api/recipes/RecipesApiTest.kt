@@ -115,6 +115,35 @@ class RecipesApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `createRecipeFromImage should deserialize correctly`() = runTest {
+        val expectedLanguage = "en-US"
+        createTestMealieClient(
+            responseJson = "",
+            verifyRequest = { request ->
+                assertEquals(
+                    expectedLanguage,
+                    request.url.parameters["translateLanguage"]
+                )
+            }
+        )
+            .recipesApi
+            .createFromImage(
+                translateLanguage = expectedLanguage,
+                image = MultiPartFormDataContent(
+                    formData {
+                        append("image", byteArrayOf(0))
+                    }
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    Unit,
+                    response.getOrThrow(),
+                )
+            }
+    }
 }
 
 private const val RECIPE_JSON = """
