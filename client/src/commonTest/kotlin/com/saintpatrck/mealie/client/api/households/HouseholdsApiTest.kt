@@ -7,16 +7,13 @@ import com.saintpatrck.mealie.client.api.households.model.CreateCookbookRequestJ
 import com.saintpatrck.mealie.client.api.households.model.EventNotificationJson
 import com.saintpatrck.mealie.client.api.households.model.UpdateCookbookRequestJson
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
-import com.saintpatrck.mealie.client.api.model.RecipeCategoryJson
-import com.saintpatrck.mealie.client.api.model.RecipeJson
-import com.saintpatrck.mealie.client.api.model.RecipeTagJson
-import com.saintpatrck.mealie.client.api.model.RecipeToolJson
 import com.saintpatrck.mealie.client.api.model.getOrNull
 import com.saintpatrck.mealie.client.api.model.getOrThrow
+import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
+import com.saintpatrck.mealie.client.api.util.createMockRecipeJson
 import io.ktor.client.engine.mock.toByteArray
 import io.ktor.http.HttpMethod
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -294,54 +291,7 @@ private val COOKBOOK_WITH_RECIPES_JSON = """
     "parts": []
   },
   "recipes": [
-    {
-      "id": "id",
-      "userId": "userId",
-      "householdId": "householdId",
-      "groupId": "groupId",
-      "name": "name",
-      "slug": "slug",
-      "image": null,
-      "recipeServings": 0,
-      "recipeYieldQuantity": 0,
-      "recipeYield": "recipeYield",
-      "totalTime": "totalTime",
-      "prepTime": "prepTime",
-      "cookTime": "cookTime",
-      "performTime": "performTime",
-      "description": "description",
-      "recipeCategory": [
-        {
-          "id": "id",
-          "name": "name",
-          "slug": "slug"
-        }
-      ],
-      "tags": [
-        {
-          "id": "id",
-          "name": "name",
-          "slug": "slug"
-        }
-      ],
-      "tools": [
-        {
-          "id": "id",
-          "name": "name",
-          "slug": "slug",
-          "householdsWithTool": [
-            "householdsWithTool"
-          ]
-        }
-      ],
-      "rating": 0.0,
-      "orgURL": "orgURL",
-      "dateAdded": "2019-08-24",
-      "dateUpdated": "2019-08-24T14:15:22Z",
-      "createdAt": "2019-08-24T14:15:22Z",
-      "updatedAt": "2019-08-24T14:15:22Z",
-      "lastMade": "2019-08-24T14:15:22Z"
-    }
+    $RECIPE_JSON  
   ]
 }
 """
@@ -351,6 +301,7 @@ private fun createMockPagedEventNotificationsResponse() = PagedResponseJson(
     page = 1,
     perPage = 10,
     totalPages = 0,
+    total = 0,
     items = listOf(createMockEventNotificationJson()),
     next = "next",
     previous = "previous",
@@ -396,6 +347,7 @@ private fun createMockPagedCookbooksResponseJson() = PagedResponseJson(
     page = 1,
     perPage = 10,
     totalPages = 0,
+    total = 0,
     items = listOf(createMockCookbookJson()),
     next = "next",
     previous = "previous"
@@ -424,51 +376,4 @@ private fun createMockCookbookWithRecipesJson() = CookbookWithRecipesJson(
     groupId = "groupId",
     householdId = "householdId",
     recipes = listOf(createMockRecipeJson())
-)
-
-private fun createMockRecipeJson() = RecipeJson(
-    id = "id",
-    userId = "userId",
-    householdId = "householdId",
-    groupId = "groupId",
-    name = "name",
-    slug = "slug",
-    image = null,
-    recipeServings = 0.0,
-    recipeYieldQuantity = 0.0,
-    recipeYield = "recipeYield",
-    totalTime = "totalTime",
-    prepTime = "prepTime",
-    cookTime = "cookTime",
-    performTime = "performTime",
-    description = "description",
-    recipeCategory = listOf(createMockRecipeCategory()),
-    tags = listOf(createMockRecipeTag()),
-    tools = listOf(createMockRecipeTool()),
-    rating = 0.0,
-    orgUrl = "orgURL",
-    dateAdded = "2019-08-24",
-    dateUpdated = Instant.parse("2019-08-24T14:15:22Z"),
-    createdAt = Instant.parse("2019-08-24T14:15:22Z"),
-    updatedAt = Instant.parse("2019-08-24T14:15:22Z"),
-    lastMade = Instant.parse("2019-08-24T14:15:22Z"),
-)
-
-private fun createMockRecipeCategory() = RecipeCategoryJson(
-    id = "id",
-    name = "name",
-    slug = "slug",
-)
-
-private fun createMockRecipeTag() = RecipeTagJson(
-    id = "id",
-    name = "name",
-    slug = "slug",
-)
-
-private fun createMockRecipeTool() = RecipeToolJson(
-    id = "id",
-    name = "name",
-    slug = "slug",
-    householdsWithTool = listOf("householdsWithTool")
 )

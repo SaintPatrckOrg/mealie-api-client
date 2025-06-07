@@ -1,6 +1,7 @@
 package com.saintpatrck.mealie.client.api.recipes
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
+import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrThrow
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
@@ -8,6 +9,8 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRe
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
+import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
+import com.saintpatrck.mealie.client.api.util.createMockRecipeJson
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import kotlinx.coroutines.test.runTest
@@ -18,7 +21,7 @@ class RecipesApiTest : BaseApiTest() {
 
     @Test
     fun `testScrapeUrl should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = RECIPE_JSON)
+        createTestMealieClient(responseJson = TEST_SCRAPE_URL_RESPONSE_JSON)
             .recipesApi
             .testScrapeUrl(
                 testScrapeUrlRequest = TestScrapeUrlRequestJson(
@@ -28,7 +31,7 @@ class RecipesApiTest : BaseApiTest() {
             )
             .also { response ->
                 assertEquals(
-                    createMockRecipeJson(),
+                    createMockTestScrapeUrlResponseJson(),
                     response.getOrThrow(),
                 )
             }
@@ -144,9 +147,22 @@ class RecipesApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `getRecipes should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = PAGED_RECIPE_RESPONSE_JSON)
+            .recipesApi
+            .getRecipes()
+            .also { response ->
+                assertEquals(
+                    createMockPagedRecipeResponseJson(),
+                    response.getOrThrow(),
+                )
+            }
+    }
 }
 
-private const val RECIPE_JSON = """
+private const val TEST_SCRAPE_URL_RESPONSE_JSON = """
 {
     "@context": "https://schema.org/",
     "@type": "Recipe",
@@ -179,7 +195,22 @@ private const val CREATE_RECIPE_FROM_URL_BULK_JSON_RESPONSE = """
 }
 """
 
-private fun createMockRecipeJson() = TestScrapeUrlResponseJson(
+private val PAGED_RECIPE_RESPONSE_JSON = """
+{
+    "page": 1,
+    "per_page": 10,
+    "total": 6,
+    "total_pages": 0,
+    "items": [
+        $RECIPE_JSON
+    ],
+    "next": "next",
+    "previous": "previous"
+}
+"""
+    .trimIndent()
+
+private fun createMockTestScrapeUrlResponseJson() = TestScrapeUrlResponseJson(
     context = "https://schema.org/",
     type = "Recipe",
     name = "BALTIMORE BLONDE FRIED CHICKEN",
@@ -200,4 +231,14 @@ private fun createMockRecipeJson() = TestScrapeUrlResponseJson(
             text = "BEER BRINE"
         ),
     ),
+)
+
+private fun createMockPagedRecipeResponseJson() = PagedResponseJson(
+    page = 1,
+    perPage = 10,
+    totalPages = 0,
+    total = 6,
+    items = listOf(createMockRecipeJson()),
+    next = "next",
+    previous = "previous",
 )
