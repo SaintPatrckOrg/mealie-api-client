@@ -9,7 +9,9 @@ import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.Headers
+import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.POST
+import io.ktor.client.request.forms.MultiPartFormDataContent
 
 /**
  * The API for managing recipe information.
@@ -53,4 +55,13 @@ interface RecipesApi {
     suspend fun createFromUrlBulk(
         @Body request: CreateRecipeFromUrlBulkRequestJson,
     ): MealieResponse<CreateRecipeFromUrlBulkResponseJson>
+
+    /**
+     * Creates a recipe from a zip file.
+     */
+    @Multipart
+    @POST("recipes/create/zip")
+    suspend fun createFromZip(
+        @Body archive: MultiPartFormDataContent,
+    ): MealieResponse<Unit>
 }
