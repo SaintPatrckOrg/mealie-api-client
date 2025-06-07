@@ -11,6 +11,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
 /**
@@ -63,5 +64,17 @@ interface RecipesApi {
     @POST("recipes/create/zip")
     suspend fun createFromZip(
         @Body archive: MultiPartFormDataContent,
+    ): MealieResponse<Unit>
+
+    /**
+     * Creates a recipe from an image using OpenAI. Optionally, specify a language for it to
+     * translate the recipe to.
+     */
+    @Multipart
+    @POST("recipes/create/image")
+    suspend fun createFromImage(
+        @Query("translateLanguage")
+        translateLanguage: String?,
+        @Body image: MultiPartFormDataContent,
     ): MealieResponse<Unit>
 }
