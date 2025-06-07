@@ -48,7 +48,7 @@ data class RecipeJson(
     @SerialName("slug")
     val slug: String,
     @SerialName("image")
-    val image: ByteArray?,
+    val image: String?,
     @SerialName("recipeServings")
     val recipeServings: Double,
     @SerialName("recipeYieldQuantity")
@@ -84,5 +84,5 @@ data class RecipeJson(
     @SerialName("updatedAt")
     val updatedAt: Instant,
     @SerialName("lastMade")
-    val lastMade: Instant,
+    val lastMade: Instant?,
 )

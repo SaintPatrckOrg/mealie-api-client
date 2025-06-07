@@ -12,6 +12,8 @@ data class PagedResponseJson<T>(
     val page: Int,
     @SerialName("per_page")
     val perPage: Int,
+    @SerialName("total")
+    val total: Int?,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("items")

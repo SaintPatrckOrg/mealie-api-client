@@ -564,6 +564,7 @@ private fun createMockPagedUserResponseJson(): PagedResponseJson<UserResponseJso
         page = 1,
         perPage = 10,
         totalPages = 0,
+        total = 0,
         items = listOf(createMockUserResponseJson()),
         next = "string",
         previous = "string",
