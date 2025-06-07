@@ -21,6 +21,8 @@ import com.saintpatrck.mealie.client.api.user.model.SetRatingRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdatePasswordRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UpdateUserRequestJson
 import com.saintpatrck.mealie.client.api.user.model.UserResponseJson
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test
@@ -224,6 +226,29 @@ class UserApiTest : BaseApiTest() {
                     password = "password",
                     passwordConfirm = "passwordConfirm",
                 )
+            )
+            .also {
+                assertEquals(
+                    Unit,
+                    it.getOrNull(),
+                )
+            }
+    }
+
+    @Test
+    fun `updateUserImage should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .userApi
+            .updateUserImage(
+                userId = "userId",
+                image = MultiPartFormDataContent(
+                    parts = formData {
+                        append(
+                            key = "profile",
+                            value = byteArrayOf(),
+                        )
+                    }
+                ),
             )
             .also {
                 assertEquals(
