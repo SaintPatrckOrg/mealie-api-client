@@ -9,6 +9,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJso
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import de.jensklingenberg.ktorfit.http.Body
@@ -85,6 +86,26 @@ interface RecipesApi {
 
     /**
      * Retrieve paged recipes.
+     *
+     * @param categories a list of categories to filter by. Defaults to `null`.
+     * @param tags a list of tags to filter by. Defaults to `null`.
+     * @param tools a list of tools to filter by. Defaults to `null`.
+     * @param foods a list of foods to filter by. Defaults to `null`.
+     * @param households a list of households to filter by. Defaults to `null`.
+     * @param cookbook the cookbook to filter by. Defaults to `null`.
+     * @param requireAllCategories whether to require all categories in the list. Defaults to `false`.
+     * @param requireAllTags whether to require all tags in the list. Defaults to `false`.
+     * @param requireAllTools whether to require all tools in the list. Defaults to `false`.
+     * @param requireAllFoods whether to require all foods in the list. Defaults to `false`.
+     * @param search the search query. Defaults to `null`.
+     * @param orderBy the field to order by. Defaults to `null`.
+     * @param orderByNullPosition the position of null values in the ordering. Defaults to `null`.
+     * @param orderDirection the direction of the ordering. Defaults to [OrderDirection.DESC].
+     * @param paginationSeed the seed for pagination. Defaults to `null`.
+     * @param page the page number. Defaults to `1`.
+     * @param perPage the number of items per page. Defaults to `50`.
+     *
+     * @return a paged list of recipes
      */
     @GET("recipes")
     suspend fun getRecipes(
@@ -123,4 +144,15 @@ interface RecipesApi {
         @Query("perPage")
         perPage: Int = 50,
     ): MealieResponse<PagedResponseJson<RecipeJson>>
+
+    /**
+     * Creates a new recipe.
+     *
+     * @return Mealie response containing the slug of the created recipe.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("recipes")
+    suspend fun createRecipe(
+        @Body recipe: CreateRecipeRequestJson,
+    ): MealieResponse<String>
 }

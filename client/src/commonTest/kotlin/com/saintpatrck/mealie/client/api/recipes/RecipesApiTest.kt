@@ -7,6 +7,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJso
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
@@ -160,6 +161,21 @@ class RecipesApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `createRecipe should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "mockSlug")
+            .recipesApi
+            .createRecipe(
+                recipe = createMockCreateRecipeRequestJson(),
+            )
+            .also { response ->
+                assertEquals(
+                    "mockSlug",
+                    response.getOrThrow(),
+                )
+            }
+    }
 }
 
 private const val TEST_SCRAPE_URL_RESPONSE_JSON = """
@@ -241,4 +257,19 @@ private fun createMockPagedRecipeResponseJson() = PagedResponseJson(
     items = listOf(createMockRecipeJson()),
     next = "next",
     previous = "previous",
+)
+
+private fun createMockCreateRecipeRequestJson() = CreateRecipeRequestJson(
+    name = "mockName",
+    householdId = "mockHouseholdId",
+    groupId = "mockGroupId",
+    recipeYield = "mockRecipeYield",
+    totalTime = "mockTotalTime",
+    prepTime = "mockPrepTime",
+    cookTime = "mockCookTime",
+    performTime = "mockPerformTime",
+    recipeCategory = emptyList(),
+    tags = emptyList(),
+    tools = emptyList(),
+    rating = 0.0,
 )
