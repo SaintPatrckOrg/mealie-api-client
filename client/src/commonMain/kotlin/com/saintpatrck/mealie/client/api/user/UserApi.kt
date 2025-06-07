@@ -25,10 +25,12 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
+import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
+import io.ktor.client.request.forms.MultiPartFormDataContent
 
 /**
  * Represents the API for managing user information.
@@ -162,6 +164,18 @@ interface UserApi {
     suspend fun resetPassword(
         @Body
         resetPasswordRequest: ResetPasswordRequestJson,
+    ): MealieResponse<Unit>
+
+    /**
+     * Updates the current user's profile image.
+     */
+    @Multipart
+    @POST("users/{userId}/image")
+    suspend fun updateUserImage(
+        @Path("userId")
+        userId: String,
+        @Body
+        image: MultiPartFormDataContent,
     ): MealieResponse<Unit>
 
     /**
