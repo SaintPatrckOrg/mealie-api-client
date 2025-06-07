@@ -8,6 +8,8 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRe
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -90,6 +92,25 @@ class RecipesApiTest : BaseApiTest() {
                     CreateRecipeFromUrlBulkResponseJson(
                         reportId = "f7f19343-4139-4e9f-a07e-a6fbfbe08b0f",
                     ),
+                    response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `createRecipeFromZip should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .recipesApi
+            .createFromZip(
+                archive = MultiPartFormDataContent(
+                    formData {
+                        append("archive", byteArrayOf(0))
+                    }
+                )
+            )
+            .also { response ->
+                assertEquals(
+                    Unit,
                     response.getOrThrow(),
                 )
             }
