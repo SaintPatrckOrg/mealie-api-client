@@ -7,7 +7,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJso
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
-import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
@@ -167,11 +167,26 @@ class RecipesApiTest : BaseApiTest() {
         createTestMealieClient(responseJson = "mockSlug")
             .recipesApi
             .createRecipe(
-                recipe = createMockCreateRecipeRequestJson(),
+                recipe = createMockRecipeRequestJson(),
             )
             .also { response ->
                 assertEquals(
                     "mockSlug",
+                    response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `updateRecipes should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .recipesApi
+            .updateRecipes(
+                recipes = listOf(createMockRecipeRequestJson())
+            )
+            .also { response ->
+                assertEquals(
+                    Unit,
                     response.getOrThrow(),
                 )
             }
@@ -210,7 +225,6 @@ private const val CREATE_RECIPE_FROM_URL_BULK_JSON_RESPONSE = """
     "reportId": "f7f19343-4139-4e9f-a07e-a6fbfbe08b0f"
 }
 """
-
 private val PAGED_RECIPE_RESPONSE_JSON = """
 {
     "page": 1,
@@ -242,7 +256,7 @@ private fun createMockTestScrapeUrlResponseJson() = TestScrapeUrlResponseJson(
         "BEER BRINE",
     ),
     recipeInstructions = listOf(
-        TestScrapeUrlResponseJson.RecipeInstruction(
+        TestScrapeUrlResponseJson.InstructionJson(
             type = "HowToStep",
             text = "BEER BRINE"
         ),
@@ -259,17 +273,38 @@ private fun createMockPagedRecipeResponseJson() = PagedResponseJson(
     previous = "previous",
 )
 
-private fun createMockCreateRecipeRequestJson() = CreateRecipeRequestJson(
-    name = "mockName",
+private fun createMockRecipeRequestJson() = RecipeRequestJson(
+    id = "mockId",
+    userId = "mockUserId",
     householdId = "mockHouseholdId",
     groupId = "mockGroupId",
+    name = "mockName",
+    slug = "mockSlug",
+    image = "mockImage",
+    recipeServings = 1.0,
+    recipeYieldQuantity = 1.0,
     recipeYield = "mockRecipeYield",
     totalTime = "mockTotalTime",
     prepTime = "mockPrepTime",
     cookTime = "mockCookTime",
     performTime = "mockPerformTime",
+    description = "mockDescription",
     recipeCategory = emptyList(),
     tags = emptyList(),
     tools = emptyList(),
     rating = 0.0,
+    orgUrl = "mockOrgUrl",
+    dateAdded = "mockDateAdded",
+    dateUpdated = null,
+    createdAt = null,
+    updatedAt = null,
+    lastMade = null,
+    recipeIngredients = emptyList(),
+    recipeInstructions = emptyList(),
+    nutrition = null,
+    settings = null,
+    assets = emptyList(),
+    notes = emptyList(),
+    extras = null,
+    comments = emptyList(),
 )

@@ -9,7 +9,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJso
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
-import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import de.jensklingenberg.ktorfit.http.Body
@@ -17,6 +17,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
@@ -153,6 +154,15 @@ interface RecipesApi {
     @Headers("Content-Type: application/json")
     @POST("recipes")
     suspend fun createRecipe(
-        @Body recipe: CreateRecipeRequestJson,
+        @Body recipe: RecipeRequestJson,
     ): MealieResponse<String>
+
+    /**
+     * Bulk update recipes.
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("recipes")
+    suspend fun updateRecipes(
+        @Body recipes: List<RecipeRequestJson>,
+    ): MealieResponse<Unit>
 }

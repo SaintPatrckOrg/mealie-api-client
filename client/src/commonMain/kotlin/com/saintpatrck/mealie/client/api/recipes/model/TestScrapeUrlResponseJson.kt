@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Models a recipe.
+ * Models a scraped recipe.
  */
 @Serializable
 data class TestScrapeUrlResponseJson(
@@ -33,14 +33,14 @@ data class TestScrapeUrlResponseJson(
     @SerialName("recipeIngredient")
     val recipeIngredient: List<String>?,
     @SerialName("recipeInstructions")
-    val recipeInstructions: List<RecipeInstruction>?,
+    val recipeInstructions: List<InstructionJson>?,
 ) {
 
     /**
-     * Models a recipe instruction.
+     * Models a scraped recipe's instruction.
      */
     @Serializable
-    data class RecipeInstruction(
+    data class InstructionJson(
         @SerialName("@type")
         val type: String,
         @SerialName("text")
