@@ -60,6 +60,12 @@ val RECIPE_JSON = """
 }
 """
     .trimIndent()
+val RECIPE_LIST_JSON = """
+[
+    $RECIPE_JSON
+]
+"""
+    .trimIndent()
 
 /**
  * Create a mock [RecipeJson] for testing.

@@ -16,6 +16,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.Multipart
+import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Query
@@ -164,5 +165,14 @@ interface RecipesApi {
     @PUT("recipes")
     suspend fun updateRecipes(
         @Body recipes: List<RecipeRequestJson>,
-    ): MealieResponse<Unit>
+    ): MealieResponse<List<RecipeJson>>
+
+    /**
+     * Bulk patch recipes.
+     */
+    @Headers("Content-Type: application/json")
+    @PATCH("recipes")
+    suspend fun patchRecipes(
+        @Body recipes: List<RecipeRequestJson>,
+    ): MealieResponse<List<RecipeJson>>
 }

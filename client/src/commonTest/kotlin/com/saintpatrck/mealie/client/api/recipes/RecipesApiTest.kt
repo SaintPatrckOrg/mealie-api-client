@@ -1,20 +1,27 @@
 package com.saintpatrck.mealie.client.api.recipes
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
+import com.saintpatrck.mealie.client.api.model.MultiPurposeLabelSummaryJson
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrThrow
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeIngredientJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeInstructionJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeNutritionJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeSettingsJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
+import com.saintpatrck.mealie.client.api.util.RECIPE_LIST_JSON
 import com.saintpatrck.mealie.client.api.util.createMockRecipeJson
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -179,21 +186,36 @@ class RecipesApiTest : BaseApiTest() {
 
     @Test
     fun `updateRecipes should deserialize correctly`() = runTest {
-        createTestMealieClient(responseJson = "")
+        createTestMealieClient(responseJson = RECIPE_LIST_JSON)
             .recipesApi
             .updateRecipes(
                 recipes = listOf(createMockRecipeRequestJson())
             )
             .also { response ->
                 assertEquals(
-                    Unit,
+                    listOf(createMockRecipeJson()),
+                    response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `patchRecipes should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = RECIPE_LIST_JSON)
+            .recipesApi
+            .patchRecipes(
+                recipes = listOf(createMockRecipeRequestJson())
+            )
+            .also { response ->
+                assertEquals(
+                    listOf(createMockRecipeJson()),
                     response.getOrThrow(),
                 )
             }
     }
 }
 
-private const val TEST_SCRAPE_URL_RESPONSE_JSON = """
+private val TEST_SCRAPE_URL_RESPONSE_JSON = """
 {
     "@context": "https://schema.org/",
     "@type": "Recipe",
@@ -219,12 +241,14 @@ private const val TEST_SCRAPE_URL_RESPONSE_JSON = """
     ]
 }
 """
+    .trimIndent()
 private const val CREATE_RECIPE_FROM_HTML_OR_JSON_RESPONSE = "mockResponse"
-private const val CREATE_RECIPE_FROM_URL_BULK_JSON_RESPONSE = """
+private val CREATE_RECIPE_FROM_URL_BULK_JSON_RESPONSE = """
 {
     "reportId": "f7f19343-4139-4e9f-a07e-a6fbfbe08b0f"
 }
 """
+    .trimIndent()
 private val PAGED_RECIPE_RESPONSE_JSON = """
 {
     "page": 1,
@@ -274,37 +298,110 @@ private fun createMockPagedRecipeResponseJson() = PagedResponseJson(
 )
 
 private fun createMockRecipeRequestJson() = RecipeRequestJson(
-    id = "mockId",
-    userId = "mockUserId",
-    householdId = "mockHouseholdId",
-    groupId = "mockGroupId",
-    name = "mockName",
-    slug = "mockSlug",
-    image = "mockImage",
-    recipeServings = 1.0,
-    recipeYieldQuantity = 1.0,
-    recipeYield = "mockRecipeYield",
-    totalTime = "mockTotalTime",
-    prepTime = "mockPrepTime",
-    cookTime = "mockCookTime",
-    performTime = "mockPerformTime",
-    description = "mockDescription",
+    id = "8da7c6cc-d122-4c46-b629-88ce745dba36",
+    userId = "2d8b754b-7e78-4415-a3cb-2e72678dc2ed",
+    householdId = "56ebaa77-e16e-4337-81d7-643798394270",
+    groupId = "09ef762a-c811-45a9-8db8-cb2037269a10",
+    name = "TEST TEST TEST CHICKEN & APPLE BANGERS & MASH TEST TEST TEST",
+    slug = "test-test-test-chicken-apple-bangers-mash-test-test-test",
+    image = null,
+    recipeServings = 0.0,
+    recipeYieldQuantity = 0.0,
+    recipeYield = null,
+    totalTime = null,
+    prepTime = null,
+    cookTime = null,
+    performTime = null,
+    description = "",
     recipeCategory = emptyList(),
     tags = emptyList(),
     tools = emptyList(),
-    rating = 0.0,
-    orgUrl = "mockOrgUrl",
-    dateAdded = "mockDateAdded",
-    dateUpdated = null,
-    createdAt = null,
-    updatedAt = null,
+    rating = null,
+    orgUrl = null,
+    dateAdded = "2025-06-07",
+    dateUpdated = Instant.parse("2025-06-07T03:30:46.513510Z"),
+    createdAt = Instant.parse("2025-06-07T03:30:46.513510Z"),
+    updatedAt = Instant.parse("2025-06-07T03:30:46.513510Z"),
     lastMade = null,
-    recipeIngredients = emptyList(),
-    recipeInstructions = emptyList(),
-    nutrition = null,
-    settings = null,
+    recipeIngredients = listOf(
+        createMockRecipeIngredient(number = 1),
+    ),
+    recipeInstructions = listOf(
+        createMockRecipeInstruction(number = 1),
+    ),
+    nutrition = createMockRecipeNutrition(number = 1),
+    settings = createMockRecipeSettings(),
     assets = emptyList(),
     notes = emptyList(),
     extras = null,
     comments = emptyList(),
 )
+
+private fun createMockRecipeIngredient(
+    number: Int,
+): RecipeIngredientJson = RecipeIngredientJson(
+    quantity = number.toDouble(),
+    unit = RecipeIngredientJson.IngredientUnitJson(
+        id = "mockId-$number",
+        name = "mockName-$number",
+        pluralName = "mockPluralName-$number",
+        description = "mockDescription-$number",
+        extras = "mockExtras-$number",
+        fraction = true,
+        abbreviation = "mockAbbreviation-$number",
+        pluralAbbreviation = "mockPluralAbbreviation-$number",
+        useAbbreviation = false,
+        aliases = listOf("mockAlias-$number"),
+        createdAt = Instant.parse("2025-06-07T03:30:46.513510Z"),
+        updatedAt = Instant.parse("2025-06-07T03:30:46.513510Z"),
+    ),
+    food = RecipeIngredientJson.IngredientFoodJson(
+        id = "mockId-$number",
+        name = "mockName-$number",
+        pluralName = "mockPluralName-$number",
+        description = "mockDescription-$number",
+        extras = "mockExtras-$number",
+        labelId = "mockLabelId-$number",
+        aliases = listOf("mockAlias-$number"),
+        householdsWithIngredientFood = listOf("mockHouseholdWithIngredientFood-$number"),
+        label = MultiPurposeLabelSummaryJson(
+            id = "mockId-$number",
+            name = "mockName-$number",
+            color = "mockColor-$number",
+            groupId = "mockGroupId-$number",
+        ),
+    ),
+    note = "mockNote-$number",
+    isFood = true,
+    disableAmount = true,
+    display = "mockDisplay-$number",
+    title = "mockTitle-$number",
+    originalText = "mockOriginalText-$number",
+    referenceId = "mockReferenceId-$number",
+)
+
+private fun createMockRecipeInstruction(
+    number: Int,
+): RecipeInstructionJson = RecipeInstructionJson(
+    id = "mockId-$number",
+    title = "mockTitle-$number",
+    text = "mockText-$number",
+    ingredientReferences = listOf("mockIngredientReferences-$number"),
+)
+
+private fun createMockRecipeNutrition(
+    number: Int? = null,
+): RecipeNutritionJson = RecipeNutritionJson(
+    calories = "mockCalories-$number",
+    carbohydrateContent = "mockCarbohydrateContent-$number",
+    cholesterolContent = "mockCholesterolContent-$number",
+    fatContent = "mockFatContent-$number",
+    fiberContent = "mockFiberContent-$number",
+    proteinContent = "mockProteinContent-$number",
+    saturatedFatContent = "mockSaturatedFatContent-$number",
+    sodiumContent = "mockSodiumContent-$number",
+    sugarContent = "mockSugarContent-$number",
+    unsaturatedFatContent = "mockUnsaturatedFatContent-$number"
+)
+
+private fun createMockRecipeSettings(): RecipeSettingsJson = RecipeSettingsJson()
