@@ -178,8 +178,21 @@ interface RecipesApi {
 
     /**
      * Suggest recipes matching the given criteria.
+     *
+     * @param foods A list of foods to include in the suggestions. Defaults to `null`.
+     * @param tools A list of tools to include in the suggestions. Defaults to `null`.
+     * @param orderBy The field to order the suggestions by. Defaults to `null`.
+     * @param orderByNullPosition The position of null values when ordering. Defaults to `null`.
+     * @param orderDirection The direction of the ordering. Defaults to [OrderDirection.DESC].
+     * @param paginationSeed A seed for pagination. Defaults to `null`.
+     * @param limit The maximum number of suggestions to return. Defaults to `10`.
+     * @param maxMissingFoods The maximum number of missing foods allowed in a suggestion. Defaults to `5`.
+     * @param maxMissingTools The maximum number of missing tools allowed in a suggestion. Defaults to `5`.
+     * @param includesFoodsOnHand Whether to include foods on hand in the suggestions. Defaults to `true`.
+     * @param includesToolsOnHand Whether to include tools on hand in the suggestions. Defaults to `true`.
+     *
+     * @return A paged list of recipe suggestions.
      */
-    @Headers("Content-Type: application/json")
     @GET("recipes/suggestions")
     suspend fun suggestRecipes(
         @Query("foods")
