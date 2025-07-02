@@ -2,6 +2,8 @@ package com.saintpatrck.mealie.client.api.recipes
 
 import com.saintpatrck.mealie.client.api.base.BaseApiTest
 import com.saintpatrck.mealie.client.api.model.MultiPurposeLabelSummaryJson
+import com.saintpatrck.mealie.client.api.model.OrderByNullPosition
+import com.saintpatrck.mealie.client.api.model.OrderDirection
 import com.saintpatrck.mealie.client.api.model.PagedResponseJson
 import com.saintpatrck.mealie.client.api.model.getOrThrow
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJsonRequestJson
@@ -210,6 +212,36 @@ class RecipesApiTest : BaseApiTest() {
                 assertEquals(
                     listOf(createMockRecipeJson()),
                     response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
+    fun `suggestRecipes should construct url and deserialize response correctly`() = runTest {
+        createTestMealieClient(responseJson = PAGED_RECIPE_RESPONSE_JSON) {
+            assertEquals(
+                "http://localhost:9925/recipes/suggestions?foods=mockFood1&foods=mockFood2&tools=mockTool1&tools=mockTool2&orderBy=mockOrderBy&orderByNullPosition=FIRST&orderDirection=ASC&paginationSeed=mockPaginationSeed&limit=10&maxMissingFoods=5&maxMissingTools=5&includeFoodsOnHand=true&includeToolsOnHand=true",
+                it.url.toString()
+            )
+        }
+            .recipesApi
+            .suggestRecipes(
+                foods = listOf("mockFood1", "mockFood2"),
+                tools = listOf("mockTool1", "mockTool2"),
+                orderBy = "mockOrderBy",
+                orderDirection = OrderDirection.ASC,
+                orderByNullPosition = OrderByNullPosition.FIRST,
+                paginationSeed = "mockPaginationSeed",
+                limit = 10,
+                maxMissingFoods = 5,
+                maxMissingTools = 5,
+                includesFoodsOnHand = true,
+                includesToolsOnHand = true,
+            )
+            .also {
+                assertEquals(
+                    createMockPagedRecipeResponseJson(),
+                    it.getOrThrow(),
                 )
             }
     }

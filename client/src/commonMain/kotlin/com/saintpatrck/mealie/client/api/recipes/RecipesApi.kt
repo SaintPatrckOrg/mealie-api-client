@@ -175,4 +175,34 @@ interface RecipesApi {
     suspend fun patchRecipes(
         @Body recipes: List<RecipeRequestJson>,
     ): MealieResponse<List<RecipeJson>>
+
+    /**
+     * Suggest recipes matching the given criteria.
+     */
+    @Headers("Content-Type: application/json")
+    @GET("recipes/suggestions")
+    suspend fun suggestRecipes(
+        @Query("foods")
+        foods: List<String>? = null,
+        @Query("tools")
+        tools: List<String>? = null,
+        @Query("orderBy")
+        orderBy: String? = null,
+        @Query("orderByNullPosition")
+        orderByNullPosition: OrderByNullPosition? = null,
+        @Query("orderDirection")
+        orderDirection: OrderDirection = OrderDirection.DESC,
+        @Query("paginationSeed")
+        paginationSeed: String? = null,
+        @Query("limit")
+        limit: Int = 10,
+        @Query("maxMissingFoods")
+        maxMissingFoods: Int = 5,
+        @Query("maxMissingTools")
+        maxMissingTools: Int = 5,
+        @Query("includeFoodsOnHand")
+        includesFoodsOnHand: Boolean = true,
+        @Query("includeToolsOnHand")
+        includesToolsOnHand: Boolean = true,
+    ): MealieResponse<PagedResponseJson<RecipeJson>>
 }
