@@ -1,16 +1,16 @@
 [versions]
-agp = "8.10.1"
+agp = "8.13.0-alpha03"
 
 androidMinSdk = "29"
 androidCompileSdk = "36"
 iosDeploymentTarget = "16.0"
 jvmTarget = "1.8"
-kotlin = "2.1.21"
-kotlinGradlePlugin = "2.1.0"
+kotlin = "2.2.20-Beta2"
+kotlinGradlePlugin = "2.2.20-Beta2"
 kotlinxCoroutines = "1.10.2"
-kotlinxDateTime = "0.6.2"
-kotlinxSerialization = "1.8.1"
-ksp = "2.1.21-2.0.1"
+kotlinxDateTime = "0.7.1-0.6.x-compat"
+kotlinxSerialization = "1.9.0"
+ksp = "2.2.20-Beta2-2.0.2"
 ktor = "3.1.3"
 ktorfit = "2.5.2"
 
