@@ -6,7 +6,7 @@
     'config:recommended',
     'config:best-practices',
   ],
-  baseBranches: [
+  baseBranchPatterns: [
     'main',
   ],
   packageRules: [
@@ -44,7 +44,7 @@
         '/com.android.library/',
         '/org.jetbrains.kotlin.*/',
         '/com.google.devtools.ksp/',
-        '/com.android.tools.build.gradle/'
+        '/com.android.tools.build.gradle/',
       ],
     },
     {
@@ -56,10 +56,10 @@
       matchManagers: [
         'circleci',
       ],
-      groupName: 'circleci minor'
-    }
+      groupName: 'circleci minor',
+    },
   ],
-  rebaseWhen: "auto",
+  rebaseWhen: 'auto',
   rollbackPrs: true,
   dependencyDashboard: true,
   dependencyDashboardAutoclose: true,
