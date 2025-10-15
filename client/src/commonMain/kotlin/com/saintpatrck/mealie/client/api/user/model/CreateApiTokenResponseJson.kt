@@ -1,8 +1,8 @@
 package com.saintpatrck.mealie.client.api.user.model
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 /**
  * Models a response from creating an API token.

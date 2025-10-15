@@ -3,9 +3,9 @@ package com.saintpatrck.mealie.client.api.recipes.model
 import com.saintpatrck.mealie.client.api.model.RecipeCategoryJson
 import com.saintpatrck.mealie.client.api.model.RecipeTagJson
 import com.saintpatrck.mealie.client.api.model.RecipeToolJson
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Instant
 
 /**
  * Models a recipe request.

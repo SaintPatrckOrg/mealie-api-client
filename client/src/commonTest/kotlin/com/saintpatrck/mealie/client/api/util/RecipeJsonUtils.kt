@@ -4,7 +4,7 @@ import com.saintpatrck.mealie.client.api.model.RecipeCategoryJson
 import com.saintpatrck.mealie.client.api.model.RecipeJson
 import com.saintpatrck.mealie.client.api.model.RecipeTagJson
 import com.saintpatrck.mealie.client.api.model.RecipeToolJson
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 /**
  * JSON string representing a [RecipeJson] for testing.
