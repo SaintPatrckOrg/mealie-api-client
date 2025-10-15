@@ -13,6 +13,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Headers
 import de.jensklingenberg.ktorfit.http.Multipart
@@ -187,6 +188,16 @@ interface RecipesApi {
     suspend fun patchRecipes(
         @Body recipes: List<RecipeRequestJson>,
     ): MealieResponse<List<RecipeJson>>
+
+    /**
+     * Deletes a recipe.
+     *
+     * @param slug The slug or ID of the recipe to delete.
+     */
+    @DELETE("recipes/{slug}")
+    suspend fun deleteRecipe(
+        @Path("slug") slug: String,
+    ): MealieResponse<Unit>
 
     /**
      * Suggest recipes matching the given criteria.
