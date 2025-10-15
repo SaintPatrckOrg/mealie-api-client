@@ -12,6 +12,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRe
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeIngredientJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeInstructionJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeLastMadeJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeNutritionJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeSettingsJson
@@ -268,6 +269,22 @@ class RecipesApiTest : BaseApiTest() {
             .recipesApi
             .deleteRecipe("mock-slug")
             .also { response ->
+                assertIs<Unit>(response.getOrThrow())
+            }
+    }
+
+    @Test
+    fun `updateLastMade should return unit`() = runTest {
+        val request = RecipeLastMadeJson(
+            timestamp = Instant.parse("2025-06-07T03:30:46.513510Z")
+        )
+
+        createTestMealieClient(responseJson = "")
+            .recipesApi
+            .updateLastMade(
+                slug = "mock-slug",
+                request = request,
+            ).also { response ->
                 assertIs<Unit>(response.getOrThrow())
             }
     }
