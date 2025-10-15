@@ -9,6 +9,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromHtmlOrJso
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.RecipeLastMadeJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
@@ -236,6 +237,20 @@ interface RecipesApi {
     @DELETE("recipes/{slug}")
     suspend fun deleteRecipe(
         @Path("slug") slug: String,
+    ): MealieResponse<Unit>
+
+    /**
+     * Updates the `lastMade` date of a recipe.
+     *
+     * @param slug The slug or ID of the recipe to update.
+     * @param request The request body containing the new timestamp.
+     * @return A response indicating success.
+     */
+    @Headers("Content-Type: application/json")
+    @PATCH("recipes/{slug}/last-made")
+    suspend fun updateLastMade(
+        @Path("slug") slug: String,
+        @Body request: RecipeLastMadeJson,
     ): MealieResponse<Unit>
 
     /**
