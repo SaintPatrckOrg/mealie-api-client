@@ -204,6 +204,20 @@ interface RecipesApi {
     ): MealieResponse<List<RecipeJson>>
 
     /**
+     * Partially updates an existing recipe.
+     *
+     * @param slug The slug or ID of the recipe to patch.
+     * @param recipe The partial recipe data.
+     * @return The updated recipe.
+     */
+    @Headers("Content-Type: application/json")
+    @PATCH("recipes/{slug}")
+    suspend fun patchRecipe(
+        @Path("slug") slug: String,
+        @Body recipe: RecipeRequestJson,
+    ): MealieResponse<RecipeJson>
+
+    /**
      * Deletes a recipe.
      *
      * @param slug The slug or ID of the recipe to delete.
