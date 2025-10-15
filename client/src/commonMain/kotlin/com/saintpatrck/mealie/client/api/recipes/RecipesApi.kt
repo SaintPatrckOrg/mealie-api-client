@@ -218,6 +218,17 @@ interface RecipesApi {
     ): MealieResponse<RecipeJson>
 
     /**
+     * Duplicates a recipe.
+     *
+     * @param slug The slug or ID of the recipe to duplicate.
+     * @return The slug of the newly created recipe.
+     */
+    @POST("recipes/{slug}/duplicate")
+    suspend fun duplicateRecipe(
+        @Path("slug") slug: String,
+    ): MealieResponse<RecipeJson>
+
+    /**
      * Deletes a recipe.
      *
      * @param slug The slug or ID of the recipe to delete.
