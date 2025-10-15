@@ -24,9 +24,9 @@ import com.saintpatrck.mealie.client.api.user.model.UserResponseJson
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.time.Instant
 
 class UserApiTest : BaseApiTest() {
 

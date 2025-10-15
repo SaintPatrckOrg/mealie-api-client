@@ -1,10 +1,10 @@
 package com.saintpatrck.mealie.client.api.recipes.model
 
 import com.saintpatrck.mealie.client.api.model.MultiPurposeLabelSummaryJson
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
+import kotlin.time.Instant
 
 /**
  * Models a recipe ingredient.
