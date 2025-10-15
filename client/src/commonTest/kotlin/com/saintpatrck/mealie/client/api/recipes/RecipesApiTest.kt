@@ -26,6 +26,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 class RecipesApiTest : BaseApiTest() {
 
@@ -226,6 +227,16 @@ class RecipesApiTest : BaseApiTest() {
                     listOf(createMockRecipeJson()),
                     response.getOrThrow(),
                 )
+            }
+    }
+
+    @Test
+    fun `deleteRecipe should return unit`() = runTest {
+        createTestMealieClient(responseJson = "")
+            .recipesApi
+            .deleteRecipe("mock-slug")
+            .also { response ->
+                assertIs<Unit>(response.getOrThrow())
             }
     }
 
