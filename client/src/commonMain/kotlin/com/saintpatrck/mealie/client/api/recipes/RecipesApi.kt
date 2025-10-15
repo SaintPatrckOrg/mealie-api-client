@@ -172,6 +172,20 @@ interface RecipesApi {
     ): MealieResponse<String>
 
     /**
+     * Updates an existing recipe.
+     *
+     * @param slug The slug or ID of the recipe to update.
+     * @param recipe The updated recipe data.
+     * @return The updated recipe.
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("recipes/{slug}")
+    suspend fun updateRecipe(
+        @Path("slug") slug: String,
+        @Body recipe: RecipeRequestJson,
+    ): MealieResponse<RecipeJson>
+
+    /**
      * Bulk update recipes.
      */
     @Headers("Content-Type: application/json")
