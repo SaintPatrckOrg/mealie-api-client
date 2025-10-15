@@ -172,6 +172,19 @@ class RecipesApiTest : BaseApiTest() {
     }
 
     @Test
+    fun `getRecipe should deserialize correctly`() = runTest {
+        createTestMealieClient(responseJson = RECIPE_JSON)
+            .recipesApi
+            .getRecipe("some-slug")
+            .also { response ->
+                assertEquals(
+                    createMockRecipeJson(),
+                    response.getOrThrow(),
+                )
+            }
+    }
+
+    @Test
     fun `createRecipe should deserialize correctly`() = runTest {
         createTestMealieClient(responseJson = "mockSlug")
             .recipesApi

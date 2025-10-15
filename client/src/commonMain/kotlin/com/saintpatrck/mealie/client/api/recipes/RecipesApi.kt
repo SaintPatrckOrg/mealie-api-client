@@ -19,6 +19,7 @@ import de.jensklingenberg.ktorfit.http.Multipart
 import de.jensklingenberg.ktorfit.http.PATCH
 import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
+import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import io.ktor.client.request.forms.MultiPartFormDataContent
 
@@ -146,6 +147,17 @@ interface RecipesApi {
         @Query("perPage")
         perPage: Int = 50,
     ): MealieResponse<PagedResponseJson<RecipeJson>>
+
+    /**
+     * Retrieve a single recipe by its slug or ID.
+     *
+     * @param slug The slug or ID of the recipe to retrieve.
+     * @return The recipe data, or null if not found.
+     */
+    @GET("recipes/{slug}")
+    suspend fun getRecipe(
+        @Path("slug") slug: String
+    ): MealieResponse<RecipeJson>
 
     /**
      * Creates a new recipe.
