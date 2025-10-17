@@ -10,7 +10,7 @@ kotlinGradlePlugin = "2.3.0-Beta1"
 kotlinxCoroutines = "1.10.2"
 kotlinxDateTime = "0.7.1-0.6.x-compat"
 kotlinxSerialization = "1.9.0"
-ksp = "2.2.21-RC-2.0.4"
+ksp = "2.2.21-RC2-2.0.4"
 ktor = "3.3.1"
 ktorfit = "2.6.4"
 
