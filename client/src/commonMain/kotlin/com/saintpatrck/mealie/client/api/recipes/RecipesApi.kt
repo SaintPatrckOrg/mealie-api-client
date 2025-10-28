@@ -16,6 +16,8 @@ import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageRequest
 import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageResponse
+import com.saintpatrck.mealie.client.api.recipes.model.UploadAssetRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.UploadAssetResponseJson
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -327,4 +329,18 @@ interface RecipesApi {
         @Body image: UpdateRecipeImageRequest,
     ): MealieResponse<UpdateRecipeImageResponse>
 
+
+    /**
+     * Uploads an asset for a recipe.
+     *
+     * @param slug The slug or ID of the recipe.
+     * @param request The request body containing the asset details.
+     * @return A response containing information about the uploaded asset.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("recipes/{slug}/assets")
+    suspend fun uploadAsset(
+        @Path("slug") slug: String,
+        @Body request: UploadAssetRequestJson,
+    ) : MealieResponse<UploadAssetResponseJson>
 }

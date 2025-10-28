@@ -21,6 +21,8 @@ import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageRequest
 import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageResponse
+import com.saintpatrck.mealie.client.api.recipes.model.UploadAssetRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.UploadAssetResponseJson
 import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
 import com.saintpatrck.mealie.client.api.util.RECIPE_LIST_JSON
 import com.saintpatrck.mealie.client.api.util.createMockRecipeJson
@@ -379,6 +381,35 @@ class RecipesApiTest : BaseApiTest() {
                 )
             }
     }
+
+    @Test
+    fun `uploadAsset should construct url and deserialize response correctly`() = runTest {
+        createTestMealieClient(responseJson = UPLOAD_ASSET_RESPONSE_JSON) {
+            assertEquals(
+                "http://localhost:9925/recipes/mock-slug/assets",
+                it.url.toString()
+            )
+        }
+            .recipesApi
+            .uploadAsset(
+                slug = "mock-slug",
+                request = UploadAssetRequestJson(
+                    name = "mockName",
+                    icon = "mockIcon",
+                    extension = "jpg",
+                    file = "ABCDEF-123456789",
+                ),
+            )
+            .also {
+                assertEquals(
+                    UploadAssetResponseJson(
+                        name = "mockName",
+                        fileName = "mockFileName"
+                    ),
+                    it.getOrThrow(),
+                )
+            }
+    }
 }
 
 private val TEST_SCRAPE_URL_RESPONSE_JSON = """
@@ -436,6 +467,14 @@ private val UPDATE_RECIPE_IMAGE_RESPONSE_JSON = """
 }
 """
     .trimIndent()
+
+private val UPLOAD_ASSET_RESPONSE_JSON = """
+{
+    "name": "mockName",
+    "icon": "mockIcon",
+    "fileName": "mockFileName"
+}
+""".trimIndent()
 
 private fun createMockTestScrapeUrlResponseJson() = TestScrapeUrlResponseJson(
     context = "https://schema.org/",
