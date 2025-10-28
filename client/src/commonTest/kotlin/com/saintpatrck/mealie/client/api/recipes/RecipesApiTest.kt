@@ -19,6 +19,8 @@ import com.saintpatrck.mealie.client.api.recipes.model.RecipeSettingsJson
 import com.saintpatrck.mealie.client.api.recipes.model.ScrapeImageUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
+import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageRequest
+import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageResponse
 import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
 import com.saintpatrck.mealie.client.api.util.RECIPE_LIST_JSON
 import com.saintpatrck.mealie.client.api.util.createMockRecipeJson
@@ -351,6 +353,32 @@ class RecipesApiTest : BaseApiTest() {
             )
             .also { assertIs<Unit>(it.getOrThrow()) }
     }
+
+    @Test
+    fun `updateImage should construct url and deserialize response correctly`() = runTest {
+        createTestMealieClient(responseJson = UPDATE_RECIPE_IMAGE_RESPONSE_JSON) {
+            assertEquals(
+                "http://localhost:9925/recipes/mock-slug/image",
+                it.url.toString()
+            )
+        }
+            .recipesApi
+            .updateImage(
+                slug = "mock-slug",
+                image = UpdateRecipeImageRequest(
+                    image = "mockImage",
+                    extension = "jpg"
+                ),
+            )
+            .also {
+                assertEquals(
+                    UpdateRecipeImageResponse(
+                        image = "ABCDEF0123456789"
+                    ),
+                    it.getOrThrow()
+                )
+            }
+    }
 }
 
 private val TEST_SCRAPE_URL_RESPONSE_JSON = """
@@ -398,6 +426,13 @@ private val PAGED_RECIPE_RESPONSE_JSON = """
     ],
     "next": "next",
     "previous": "previous"
+}
+"""
+    .trimIndent()
+
+private val UPDATE_RECIPE_IMAGE_RESPONSE_JSON = """
+{
+    "image": "ABCDEF0123456789"
 }
 """
     .trimIndent()
