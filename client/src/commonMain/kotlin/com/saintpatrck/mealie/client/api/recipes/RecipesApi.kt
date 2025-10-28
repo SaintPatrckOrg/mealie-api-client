@@ -14,6 +14,8 @@ import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.ScrapeImageUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
+import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageRequest
+import com.saintpatrck.mealie.client.api.recipes.model.UpdateRecipeImageResponse
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
@@ -310,4 +312,19 @@ interface RecipesApi {
         @Path("slug") slug: String,
         @Body request: ScrapeImageUrlRequestJson,
     ): MealieResponse<Unit>
+
+    /**
+     * Updates the image of a recipe.
+     *
+     * @param slug The slug or ID of the recipe to update.
+     * @param image The request containing the new image data.
+     * @return The updated recipe data.
+     */
+    @Headers("Content-Type: application/json")
+    @PUT("recipes/{slug}/image")
+    suspend fun updateImage(
+        @Path("slug") slug: String,
+        @Body image: UpdateRecipeImageRequest,
+    ): MealieResponse<UpdateRecipeImageResponse>
+
 }
