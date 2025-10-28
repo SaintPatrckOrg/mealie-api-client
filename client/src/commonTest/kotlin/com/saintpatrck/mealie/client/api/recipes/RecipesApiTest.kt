@@ -16,6 +16,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.RecipeLastMadeJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeNutritionJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeSettingsJson
+import com.saintpatrck.mealie.client.api.recipes.model.ScrapeImageUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import com.saintpatrck.mealie.client.api.util.RECIPE_JSON
@@ -330,6 +331,25 @@ class RecipesApiTest : BaseApiTest() {
                     it.getOrThrow(),
                 )
             }
+    }
+
+    @Test
+    fun `scrapeImageUrl should construct url and deserialize response correctly`() = runTest {
+        createTestMealieClient(responseJson = "") {
+            assertEquals(
+                "http://localhost:9925/recipes/mock-slug/image",
+                it.url.toString()
+            )
+        }
+            .recipesApi
+            .scrapeImageUrl(
+                "mock-slug",
+                request = ScrapeImageUrlRequestJson(
+                    includeTags = true,
+                    url = "mockUrl",
+                ),
+            )
+            .also { assertIs<Unit>(it.getOrThrow()) }
     }
 }
 

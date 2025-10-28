@@ -11,6 +11,7 @@ import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlBulkRe
 import com.saintpatrck.mealie.client.api.recipes.model.CreateRecipeFromUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeLastMadeJson
 import com.saintpatrck.mealie.client.api.recipes.model.RecipeRequestJson
+import com.saintpatrck.mealie.client.api.recipes.model.ScrapeImageUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlRequestJson
 import com.saintpatrck.mealie.client.api.recipes.model.TestScrapeUrlResponseJson
 import de.jensklingenberg.ktorfit.http.Body
@@ -295,4 +296,18 @@ interface RecipesApi {
         @Query("includeToolsOnHand")
         includesToolsOnHand: Boolean = true,
     ): MealieResponse<PagedResponseJson<RecipeJson>>
+
+    /**
+     * Scrapes an image from a URL and sets it as the recipe's image.
+     *
+     * @param slug The slug or ID of the recipe to update.
+     * @param request The request body containing the URL of the image to scrape.
+     * @return A response indicating success.
+     */
+    @Headers("Content-Type: application/json")
+    @POST("recipes/{slug}/image")
+    suspend fun scrapeImageUrl(
+        @Path("slug") slug: String,
+        @Body request: ScrapeImageUrlRequestJson,
+    ): MealieResponse<Unit>
 }
