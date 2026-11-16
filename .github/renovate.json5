@@ -61,8 +61,10 @@
   ],
   rebaseWhen: 'auto',
   rollbackPrs: true,
-  dependencyDashboard: true,
-  dependencyDashboardAutoclose: true,
+  dependencyDashboard: {
+    enabled: true,
+    autoclose: true,
+  },
   ignoreUnstable: false,
   respectLatest: false,
 }
